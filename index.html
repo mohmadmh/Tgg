@@ -3,197 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة التحليلات التعليمية الشاملة</title>
+    <title>LabAcademy Pro | أكاديمية المختبر</title>
     <style>
         :root {
-            --primary-blue: #003049;
-            --secondary-blue: #669bbc;
-            --accent-red: #c1121f;
-            --bg-light: #fdf0d5;
-            --white: #ffffff;
+            --medical-blue: #023e8a;
+            --science-teal: #0096c7;
+            --info-cyan: #caf0f8;
+            --success-green: #2d6a4f;
+            --warning-orange: #ff9f1c;
+            --bg-body: #f8f9fa;
         }
 
         body {
-            background-color: var(--bg-light);
-            color: #333;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg-body);
+            color: #2b2d42;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            line-height: 1.7;
         }
 
-        /* Header */
-        header {
-            background: var(--primary-blue);
-            color: var(--white);
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        /* Navigation Menu */
-        .nav-menu {
-            display: flex;
-            justify-content: space-around;
-            background: var(--secondary-blue);
-            padding: 10px 0;
+        /* Navigation Bar */
+        nav {
+            background: var(--medical-blue);
+            color: white;
+            padding: 1rem;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .nav-item {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            cursor: pointer;
-            padding: 5px 15px;
+        .search-box {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 8px 15px;
             border-radius: 20px;
+            color: white;
+            outline: none;
+        }
+
+        .search-box::placeholder { color: #ddd; }
+
+        /* Sidebar & Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            max-width: 1200px;
+            margin: 20px auto;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            height: fit-content;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-item {
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-bottom: 5px;
             transition: 0.3s;
         }
 
-        .nav-item.active { background: var(--primary-blue); }
-
-        /* Content Sections */
-        .content-section {
-            display: none;
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            animation: fadeIn 0.5s ease;
+        .sidebar-item:hover, .sidebar-item.active {
+            background: var(--info-cyan);
+            color: var(--medical-blue);
+            font-weight: bold;
         }
 
-        .content-section.active { display: block; }
+        /* Content Area */
+        .content-area { background: transparent; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Lesson Styles */
-        .card {
-            background: var(--white);
+        .lesson-container {
+            background: white;
+            padding: 30px;
             border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
 
-        .theory-box {
-            background: #e9ecef;
-            border-right: 5px solid var(--accent-red);
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .badge-theory { background: #e0e7ff; color: #4338ca; }
+        .badge-practical { background: #dcfce7; color: #15803d; }
+
+        .methodology {
+            background: #f1f5f9;
+            border-right: 4px solid var(--science-teal);
             padding: 15px;
-            margin: 15px 0;
-            font-style: italic;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
         }
 
-        .practical-box {
-            background: #d1e7dd;
-            border-right: 5px solid #0f5132;
-            padding: 15px;
-            margin: 15px 0;
-        }
-
-        /* Quiz Styles */
-        .quiz-option {
-            display: block;
-            background: #f8f9fa;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .quiz-option:hover { background: #eee; }
-
-        footer {
-            margin-top: auto;
-            background: var(--primary-blue);
-            color: white;
-            text-align: center;
-            padding: 15px;
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .main-layout { grid-template-columns: 1fr; padding: 10px; }
+            .sidebar { display: none; } /* يمكن تحويلها للقائمة منسدلة لاحقاً */
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>أكاديمية العلوم الطبية المختبرية</h1>
-        <p>نظام تعليمي متكامل للطلاب والتقنيين</p>
-    </header>
+<nav>
+    <div style="font-weight: bold; font-size: 1.2rem;">🔬 LabAcademy Pro</div>
+    <input type="text" class="search-box" placeholder="بحث عن تحليل أو مفهوم...">
+</nav>
 
-    <div class="nav-menu">
-        <div class="nav-item active" onclick="showSection('theory')">المفاهيم النظرية</div>
-        <div class="nav-item" onclick="showSection('practical')">الطرق العلمية</div>
-        <div class="nav-item" onclick="showSection('quiz')">اختبر نفسك</div>
-    </div>
+<div class="main-layout">
+    <aside class="sidebar">
+        <div class="sidebar-item active" onclick="showContent('intro')">مقدمة المنصة</div>
+        <div class="sidebar-item" onclick="showContent('chemistry')">الكيمياء الحياتية</div>
+        <div class="sidebar-item" onclick="showContent('hematology')">علم الدم</div>
+        <div class="sidebar-item" onclick="showContent('microbiology')">الأحياء المجهرية</div>
+        <div class="sidebar-item" onclick="showContent('serology')">الفحوصات المصلية</div>
+    </aside>
 
-    <div id="theory" class="content-section active">
-        <div class="card">
-            <h2>🔬 نظرية قياس الطيف الضوئي (Spectrophotometry)</h2>
-            <div class="theory-box">
-                <strong>قانون بير-لامبرت:</strong> تنص النظرية على أن كمية الضوء الممتص بواسطة محلول تتناسب طردياً مع تركيز المادة المذابة وطول المسار الضوئي.
+    <main class="content-area">
+        
+        <div id="intro" class="lesson-container">
+            <h1>مرحباً بك في منصة مختبري التعليمية</h1>
+            <p>هذا البرنامج مصمم ليكون رفيق الطالب في المختبر، حيث يجمع بين دقة المعلومة النظرية وسهولة التطبيق العملي.</p>
+            <div style="background: var(--info-cyan); padding: 15px; border-radius: 10px;">
+                <strong>نصيحة اليوم:</strong> الدقة في سحب العينة هي أول خطوة لنجاح التحليل المختبري.
             </div>
-            <p>تستخدم هذه النظرية في معظم أجهزة الكيمياء الحيوية لتقدير تركيز الجلوكوز، اليوريا، والكوليسترول في السيرم.</p>
         </div>
 
-        <div class="card">
-            <h2>🧬 مفاهيم المناعة (Immunology)</h2>
-            <p>تعتمد الفحوصات المصلية على مبدأ الارتباط النوعي بين المستضد (Antigen) والجسم المضاد (Antibody).</p>
-        </div>
-    </div>
-
-    <div id="practical" class="content-section">
-        <div class="card">
-            <h2>🧪 طريقة عمل فحص الـ Widal Test</h2>
-            <div class="practical-box">
-                <strong>الهدف:</strong> الكشف النوعي والكمي عن الأجسام المضادة لبكتيريا السالمونيلا المسببة للتيفوئيد.
+        <div id="hematology" class="lesson-container" style="display:none;">
+            <span class="badge badge-theory">نظري + عملي</span>
+            <h1>فحص معدل ترسيب الكريات (ESR)</h1>
+            <p>يعتبر فحصاً غير نوعي ولكنه يعطي مؤشراً قوياً على وجود التهاب في الجسم.</p>
+            
+            <div class="methodology">
+                <strong>الطريقة العلمية (Westergren Method):</strong>
+                تعتمد على قياس المسافة التي تقطعها كريات الدم الحمراء في الهبوط داخل أنبوب خاص خلال ساعة واحدة.
             </div>
-            <ol>
-                <li>وضع قطرة من السيرم على السلايد في أربع دوائر.</li>
-                <li>إضافة الأنتيجينات (O, H, AH, BH) لكل دائرة.</li>
-                <li>التحريك لمدة دقيقتين وملاحظة حدوث التلازن (Agglutination).</li>
-            </ol>
+
+            <h3>خطوات العمل:</h3>
+            <ul>
+                <li>خلط الدم مع مانع التخثر (Sodium Citrate) بنسبة 4:1.</li>
+                <li>سحب الدم في أنبوب ويسترغرين حتى علامة الصفر.</li>
+                <li>وضع الأنبوب بشكل عمودي تماماً لمدة 60 دقيقة.</li>
+            </ul>
         </div>
-    </div>
 
-    <div id="quiz" class="content-section">
-        <div class="card">
-            <h2>❓ سؤال التقييم السريع</h2>
-            <p>ما هو مانع التخثر المستخدم في فحص صورة الدم الكاملة (CBC)؟</p>
-            <div class="quiz-option" onclick="checkAnswer(false)">Heparin</div>
-            <div class="quiz-option" onclick="checkAnswer(true)">EDTA</div>
-            <div class="quiz-option" onclick="checkAnswer(false)">Sodium Citrate</div>
-        </div>
-    </div>
+        </main>
+</div>
 
-    <footer>
-        حقوق النشر © 2026 | منصة التعليم الطبي المستمر
-    </footer>
-
-    <script>
-        function showSection(sectionId) {
-            // إخفاء كل الأقسام
-            document.querySelectorAll('.content-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            // إزالة الحالة النشطة من القائمة
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            // إظهار القسم المطلوب
-            document.getElementById(sectionId).classList.add('active');
-            // تفعيل زر القائمة
-            event.currentTarget.classList.add('active');
-        }
-
-        function checkAnswer(isCorrect) {
-            if(isCorrect) {
-                alert("إجابة صحيحة! برافو دكتور.");
-            } else {
-                alert("إجابة خاطئة. EDTA هو المانع الصحيح للحفاظ على شكل الخلايا.");
-            }
-        }
-    </script>
+<script>
+    function showContent(id) {
+        // إخفاء كل الحاويات
+        document.querySelectorAll('.lesson-container').forEach(c => c.style.display = 'none');
+        // إظهار المختارة
+        document.getElementById(id).style.display = 'block';
+        // تحديث القائمة الجانبية
+        document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+</script>
 
 </body>
 </html>
