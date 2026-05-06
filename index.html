@@ -3,140 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبة التقني الطبي الشاملة</title>
+    <title>موسوعة التحليلات المرضية الكبرى</title>
     <style>
         :root {
-            --primary: #023e8a; --secondary: #0077b6; --accent: #d00000;
-            --bg: #f0f2f5; --white: #ffffff;
+            --primary: #003049; --secondary: #669bbc; --accent: #c1121f;
+            --bg: #fdf0d5; --white: #ffffff; --text: #333;
         }
-        body { background: var(--bg); color: #1a1a1a; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; }
         
-        /* Header & Navigation */
-        header { background: var(--primary); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        nav { background: var(--white); padding: 10px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #ddd; }
-        .nav-btn { padding: 8px 16px; border: none; background: var(--bg); border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .nav-btn.active { background: var(--primary); color: white; }
+        header { background: var(--primary); color: white; padding: 30px; text-align: center; }
+        nav { background: var(--white); padding: 10px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .nav-btn { padding: 10px 15px; border: none; background: #eee; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .nav-btn:hover, .nav-btn.active { background: var(--secondary); color: white; }
 
-        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
+        .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
+        .search-bar { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 10px; border: 2px solid var(--secondary); font-size: 1.1rem; }
 
-        /* Library Cards */
-        .lib-card { background: var(--white); border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-right: 8px solid var(--secondary); display: none; animation: slideUp 0.4s ease; }
-        .active-card { display: block; }
+        .analysis-card { background: var(--white); border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-right: 10px solid var(--primary); display: none; }
+        .visible { display: block; animation: fadeIn 0.5s; }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .theory-box { background: #eef4fb; padding: 15px; border-radius: 10px; border: 1px solid #d0e1f3; }
-        .practical-box { background: #fff5f5; padding: 15px; border-radius: 10px; border: 1px solid #fed7d7; }
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }
+        .theory-section { background: #e9ecef; padding: 15px; border-radius: 10px; }
+        .practical-section { background: #d1e7dd; padding: 15px; border-radius: 10px; border: 1px solid #0f5132; }
+        .normal-range { background: #fff3cd; padding: 10px; border-radius: 8px; margin-top: 10px; font-weight: bold; color: #856404; }
+
+        h2 { color: var(--primary); margin: 0 0 10px 0; }
+        h4 { margin: 0 0 5px 0; color: var(--accent); text-decoration: underline; }
         
-        h2 { color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
-        h4 { margin-bottom: 5px; color: var(--accent); }
-
-        /* Search & Ask Section */
-        .ask-section { background: var(--white); padding: 20px; border-radius: 15px; margin-top: 30px; }
-        textarea { width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 10px; resize: none; }
-        .send-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%; }
-
-        footer { text-align: center; padding: 30px; color: #666; font-size: 0.8rem; }
+        footer { background: var(--primary); color: white; text-align: center; padding: 20px; margin-top: 50px; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>مكتبة التحليلات المرضية 🔬</h1>
-    <p>دليلك العملي والنظري في المختبر الطبي</p>
+    <h1>مكتبة التحليلات المرضية الشاملة 🔬</h1>
+    <p>أكثر من 20 تحليلاً مختبرياً مفصلاً نظرياً وعملياً</p>
 </header>
 
-<nav id="mainNav">
-    <button class="nav-btn active" onclick="showCategory('draw', this)">سحب الدم</button>
-    <button class="nav-btn" onclick="showCategory('bio', this)">الكيمياء</button>
-    <button class="nav-btn" onclick="showCategory('hem', this)">علم الدم</button>
-    <button class="nav-btn" onclick="showCategory('ser', this)">المصلية</button>
-    <button class="nav-btn" onclick="showCategory('ask', this)">استفسارات</button>
+<nav>
+    <button class="nav-btn active" onclick="filter('all')">الكل</button>
+    <button class="nav-btn" onclick="filter('bio')">الكيمياء</button>
+    <button class="nav-btn" onclick="filter('hem')">علم الدم</button>
+    <button class="nav-btn" onclick="filter('ser')">المصلية</button>
+    <button class="nav-btn" onclick="filter('hor')">الهرمونات</button>
 </nav>
 
 <div class="container">
-    
-    <div id="draw" class="lib-card active-card">
-        <h2>💉 تقنيات سحب الدم الوريدي</h2>
-        <div class="theory-box">
-            <h4>الجانب النظري:</h4>
-            <p>يعتمد السحب الناجح على تحديد وريد المرفق الأصلي (Median Cubital) لبعده عن الأعصاب وسهولة تثبيته. يجب مراعاة نوع مانع التخثر حسب الفحص المطلوب.</p>
-        </div>
-        <div class="practical-box">
-            <h4>الجانب العملي:</h4>
-            <ul>
-                <li>تحضير السرنجة (أو Vacuteiner) والقطن المعقم.</li>
-                <li>ربط التورنيكة لم مدة لا تزيد عن دقيقة.</li>
-                <li>زاوية السحب 15-30 درجة بفتحة الإبرة للأعلى.</li>
-                <li>تفريغ الدم بهدوء على جدار الأنبوب لتجنب انحلال الدم (Hemolysis).</li>
-            </ul>
-        </div>
-    </div>
+    <input type="text" class="search-bar" id="searchInput" onkeyup="searchFunction()" placeholder="ابحث عن اسم التحليل (مثلاً: CBC, Sugar, TSH)...">
 
-    <div id="bio" class="lib-card">
-        <h2>🧪 الكيمياء الحياتية (Biochemistry)</h2>
-        <div class="card-item">
-            <h3>1. تحليل السكر (Glucose)</h3>
-            <div class="info-grid">
-                <div class="theory-box"><strong>النظري:</strong> قياس مستوى الطاقة في الجسم. مستوياته: Fasting (70-110 mg/dL).</div>
-                <div class="practical-box"><strong>العملي:</strong> عينة سيرم (أنبوب أصفر/أحمر) أو بلازما (أنبوب رمادي Fluoride). طريقة العمل: Enzymatic Colorimetric.</div>
-            </div>
+    <div id="library">
         </div>
-        <hr>
-        <div class="card-item">
-            <h3>2. اليوريا والكرياتينين (RFT)</h3>
-            <p>تستخدم لتقييم وظائف الكلى. الارتفاع الحاد يشير لخلل في الفلترة الكبيبية.</p>
-        </div>
-    </div>
-
-    <div id="hem" class="lib-card">
-        <h2>🩸 علم الدم (Hematology)</h2>
-        <div class="card-item">
-            <h3>تحليل CBC الشامل</h3>
-            <div class="theory-box"><strong>النظري:</strong> عد الكريات البيضاء (WBC) للدلالة على الالتهاب، والحمراء (RBC) لفقر الدم.</div>
-            <div class="practical-box"><strong>العملي:</strong> أنبوب EDTA (بنفسجي). يجب المزج فوراً (8 مرات قلب هادئ). القراءة عبر جهاز الـ Analyzer.</div>
-        </div>
-    </div>
-
-    <div id="ser" class="lib-card">
-        <h2>🔬 الفحوصات المصلية (Serology)</h2>
-        <div class="card-item">
-            <h3>فحص الـ Widal & Rose Bengal</h3>
-            <div class="theory-box"><strong>النظري:</strong> البحث عن الأجسام المضادة (Antibodies) الناتجة عن بكتيريا السالمونيلا أو البروسيلات.</div>
-            <div class="practical-box"><strong>العملي:</strong> طريقة السلايد (Slide Agglutination). مزج الأنتيجين مع السيرم لمدة دقيقتين وملاحظة التلازن.</div>
-        </div>
-    </div>
-
-    <div id="ask" class="lib-card">
-        <h2>✉️ ركن الاستفسارات</h2>
-        <p>لديك حالة مختبرية غريبة؟ أرسل تفاصيلها هنا:</p>
-        <textarea rows="4" placeholder="اكتب سؤالك هنا..."></textarea>
-        <button class="send-btn" onclick="alert('تم إرسال استفسارك للمكتبة العلمية')">إرسال السؤال</button>
-    </div>
-
 </div>
 
 <footer>
-    <p>مكتبة التحليلات المرضية الشاملة - جميع الحقوق محفوظة لعام 2026</p>
-    <p>تم التصميم لخدمة طلاب التقنيات الطبية</p>
+    <p>تم إعداد هذه المكتبة بواسطة: تقني مختبر | 2026</p>
 </footer>
 
 <script>
-    function showCategory(id, btn) {
-        // إخفاء كل الكروت
-        document.querySelectorAll('.lib-card').forEach(card => {
-            card.classList.remove('active-card');
+    // قاعدة بيانات التحاليل (أكثر من 20 تحليل)
+    const data = [
+        { name: "CBC (صورة الدم الكاملة)", cat: "hem", theory: "تقييم خلايا الدم الحمراء والبيضاء والصفيحات للكشف عن فقر الدم والالتهابات.", practical: "أنبوب EDTA (بنفسجي)، يمزج جيداً، يقرأ بجهاز الـ Analyzer.", range: "WBC: 4k-11k, Hb: 12-16 g/dL" },
+        { name: "Blood Glucose (السكر)", cat: "bio", theory: "قياس مستوى الجلوكوز في البلازما لتشخيص السكري.", practical: "أنبوب Serum أو Fluoride، استخدام تقنية GOD-PAP.", range: "Fasting: 70-110 mg/dL" },
+        { name: "HbA1c (السكر التراكمي)", cat: "bio", theory: "معدل السكر في الدم لآخر 3 أشهر عبر ارتباط الجلوكوز بالهيموجلوبين.", practical: "أنبوب EDTA، دم كامل، تقنية HPLC أو العكرية.", range: "Normal: < 5.7%" },
+        { name: "Blood Grouping (الفصيلة)", cat: "hem", theory: "تحديد نوع الأنتيجينات A, B و Rh على سطح الكريات.", practical: "طريقة Slide أو Tube باستخدام Anti-A, Anti-B, Anti-D.", range: "A, B, AB, O (+/-)" },
+        { name: "Urea (اليوريا)", cat: "bio", theory: "الناتج النهائي لاستقلاب البروتينات، مؤشر لوظائف الكلى.", practical: "سيرم، طريقة Berthelot Enzymatic.", range: "15-45 mg/dL" },
+        { name: "Creatinine (الكرياتينين)", cat: "bio", theory: "أدق مؤشر لوظائف الكلى كونه ناتج من العضلات بمعدل ثابت.", practical: "سيرم، تفاعل Jaffe (لون حامض البكريك).", range: "0.6-1.2 mg/dL" },
+        { name: "Uric Acid (داء النقرس)", cat: "bio", theory: "ناتج تكسر البيورينات، ارتفاعه يسبب أملاح المفاصل.", practical: "سيرم، طريقة Uricase.", range: "3.5-7.2 mg/dL" },
+        { name: "TSH (هرمون الغدة الدرقية)", cat: "hor", theory: "الهرمون المحفز للغدة الدرقية المفرز من النخامية.", practical: "سيرم، تقنية ELIZA أو CLIA.", range: "0.4-4.5 mIU/L" },
+        { name: "T3 & T4 (هرمونات الدرقية)", cat: "hor", theory: "الهرمونات المسؤولة عن الأيض ونشاط الجسم.", practical: "سيرم، تقنية الامتصاص المناعي الشعاعي أو الفلوري.", range: "حسب الفئة العمرية" },
+        { name: "Lipid Profile (الدهون)", cat: "bio", theory: "تقييم مخاطر أمراض القلب والشرايين.", practical: "صيام 12 ساعة، سيرم، تشمل (Chol, Trig, HDL, LDL).", range: "Chol: < 200 mg/dL" },
+        { name: "Widal Test (التيفوئيد)", cat: "ser", theory: "الكشف عن أجسام مضادة لبكتيريا السالمونيلا.", practical: "سيرم، طريقة التلازن (Agglutination) على السلايد.", range: "Negative (Titer < 1/80)" },
+        { name: "Rose Bengal (الحمى المالطية)", cat: "ser", theory: "الكشف عن بكتيريا البروسيلات (Brucella).", practical: "سيرم، مزج الأنتيجين الملون مع العينة.", range: "Negative" },
+        { name: "ESR (سرعة الترسيب)", cat: "hem", theory: "مؤشر غير نوعي للالتهابات في الجسم.", practical: "أنبوب ويسترغرين، دم مع سترات الصوديوم 4:1.", range: "Male: < 15, Female: < 20 mm/hr" },
+        { name: "PT & PTT (تخثر الدم)", cat: "hem", theory: "تقييم عوامل التخثر قبل العمليات الجراحية.", practical: "أنبوب سترات الصوديوم (أزرق)، بلازما فقيرة بالصفيحات.", range: "PT: 11-13.5 sec" },
+        { name: "GUE (تحليل الإدرار العام)", cat: "ser", theory: "فحص الخواص الفيزيائية والكيميائية والمجهرية للإدرار.", practical: "عينة صباحية، استخدام شريط الفحص (Dipstick) والمجهر.", range: "Normal (No RBC, No Pus)" },
+        { name: "ASOT (الروماتيزم)", cat: "ser", theory: "الكشف عن سموم بكتيريا Streptolysin O.", practical: "سيرم، طريقة الـ Latex Agglutination.", range: "< 200 IU/mL" },
+        { name: "CRP (البروتين التفاعلي)", cat: "ser", theory: "بروتين يرتفع في حالات الالتهاب الحاد.", practical: "سيرم، لاتكس أو تقنية توربيديمتري.", range: "< 6 mg/L" },
+        { name: "Bilirubin (اليرقان/أبو صفار)", cat: "bio", theory: "صبغة تنتج من تكسر الكريات، تدل على أمراض الكبد.", practical: "سيرم (بعيد عن الضوء)، TSB & Direct.", range: "Total: 0.2-1.2 mg/dL" },
+        { name: "GPT/ALT (إنزيمات الكبد)", cat: "bio", theory: "إنزيم يوجد في خلايا الكبد، ارتفاعه يعني تلف الخلايا.", practical: "سيرم، طريقة Kinetic UV.", range: "< 40 U/L" },
+        { name: "GOT/AST (إنزيمات القلب/الكبد)", cat: "bio", theory: "يوجد في القلب والكبد والعضلات.", practical: "سيرم، طريقة حركية.", range: "< 37 U/L" },
+        { name: "Albumin (الألبومين)", cat: "bio", theory: "البروتين الرئيسي في الدم، يحافظ على الضغط الأزموزي.", practical: "سيرم، طريقة BCG.", range: "3.5-5.0 g/dL" }
+    ];
+
+    // وظيفة عرض البيانات
+    function renderLibrary() {
+        const container = document.getElementById('library');
+        data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = `analysis-card visible ${item.cat}`;
+            card.innerHTML = `
+                <h2>${item.name}</h2>
+                <div class="detail-grid">
+                    <div class="theory-section">
+                        <h4>الجانب النظري:</h4>
+                        <p>${item.theory}</p>
+                    </div>
+                    <div class="practical-section">
+                        <h4>الجانب العملي:</h4>
+                        <p>${item.practical}</p>
+                    </div>
+                </div>
+                <div class="normal-range">القيم الطبيعية: ${item.range}</div>
+            `;
+            container.appendChild(card);
         });
-        // إظهار الكارت المطلوب
-        document.getElementById(id).classList.add('active-card');
-        
-        // تحديث أزرار القائمة
-        document.querySelectorAll('.nav-btn').forEach(b => {
-            b.classList.remove('active');
-        });
-        btn.classList.add('active');
     }
+
+    // وظيفة البحث
+    function searchFunction() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let cards = document.getElementsByClassName('analysis-card');
+        for (let i = 0; i < cards.length; i++) {
+            if (cards[i].innerText.toLowerCase().includes(input)) {
+                cards[i].style.display = "block";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+
+    // وظيفة الفلترة
+    function filter(cat) {
+        let cards = document.getElementsByClassName('analysis-card');
+        for (let i = 0; i < cards.length; i++) {
+            if (cat === 'all' || cards[i].classList.contains(cat)) {
+                cards[i].style.display = "block";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+
+    // تشغيل عند التحميل
+    renderLibrary();
 </script>
 
 </body>
