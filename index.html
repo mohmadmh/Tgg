@@ -3,29 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منيو المطعم الاحترافي</title>
+    <title>SaaS Cinematic Menu</title>
     <style>
-        body { background-color: #000; color: #fff; font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; }
-        .container { border: 2px solid #c5a059; padding: 20px; border-radius: 15px; max-width: 400px; margin: auto; }
-        h1 { color: #c5a059; text-transform: uppercase; }
-        .item { border-bottom: 1px solid #222; padding: 15px 0; }
-        .price { color: #c5a059; font-weight: bold; display: block; margin-top: 5px; }
+        :root { --gold: #c5a059; --dark: #0a0a0a; --card: #161616; }
+        body { background-color: var(--dark); color: white; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding-bottom: 80px; }
+        
+        /* الهيدر السينمائي */
+        .hero { height: 200px; background: linear-gradient(rgba(0,0,0,0.6), var(--dark)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=1000'); background-size: cover; display: flex; align-items: center; justify-content: center; }
+        .hero h1 { border: 2px solid var(--gold); padding: 5px 20px; font-size: 1.8rem; text-shadow: 2px 2px 5px #000; }
+
+        .container { padding: 15px; max-width: 500px; margin: auto; }
+        .category-title { color: var(--gold); border-right: 3px solid var(--gold); padding-right: 10px; margin: 25px 0 15px; font-size: 1.3rem; }
+
+        /* كارت الطعام بأسلوب Chiaroscuro */
+        .item-card { background: var(--card); display: flex; border-radius: 12px; overflow: hidden; margin-bottom: 15px; border: 1px solid #222; transition: 0.3s; }
+        .item-card:hover { border-color: var(--gold); }
+        .item-img { width: 100px; height: 100px; background-size: cover; background-position: center; filter: brightness(0.8) contrast(1.2); }
+        .item-details { padding: 12px; flex: 1; }
+        .item-name { font-weight: bold; font-size: 1rem; display: flex; justify-content: space-between; }
+        .price { color: var(--gold); }
+        .desc { color: #888; font-size: 0.8rem; margin-top: 5px; }
+
+        /* زر الطلب عبر الواتساب */
+        .order-btn { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #25D366; color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 20px rgba(0,0,0,0.5); width: 80%; text-align: center; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>RESTAURANT X</h1>
-        <div class="item">
-            <h3>سلطة الأفوكادو الملكية</h3>
-            <p>وصف سينمائي بإضاءة خافتة</p>
-            <span class="price">12,000 د.ع</span>
-        </div>
-        <div class="item">
-            <h3>ستيك ريمبرانت المشوي</h3>
-            <p>تجربة طعام فنية فريدة</p>
-            <span class="price">35,000 د.ع</span>
-        </div>
-        <p style="margin-top: 20px; font-size: 12px; color: #555;">مدعوم بنظام SaaS المنيو الذكي</p>
+
+    <div class="hero">
+        <h1>مطعم النخبة</h1>
     </div>
+
+    <div class="container">
+        <h2 class="category-title">المقبلات</h2>
+        
+        <div class="item-card">
+            <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200');"></div>
+            <div class="item-details">
+                <div class="item-name">سلطة الأفوكادو <span>12,000 د.ع</span></div>
+                <p class="desc">أفوكادو طازج مع زيت زيتون بكر وتوابل برية.</p>
+            </div>
+        </div>
+
+        <h2 class="category-title">الأطباق الرئيسية</h2>
+
+        <div class="item-card">
+            <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?w=200');"></div>
+            <div class="item-details">
+                <div class="item-name">ستيك ريمبرانت <span>35,000 د.ع</span></div>
+                <p class="desc">شريحة لحم فاخرة مشوية بأسلوب الظلال والأضواء.</p>
+            </div>
+        </div>
+
+        <div class="item-card">
+            <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=200');"></div>
+            <div class="item-details">
+                <div class="item-name">سلمون مشوي <span>28,000 د.ع</span></div>
+                <p class="desc">سلمون طازج مع صلصة الترياكي والليمون.</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="https://wa.me/9647XXXXXXXX?text=أريد طلب الأكل من المنيو السينمائي" class="order-btn">
+        اطلب الآن عبر واتساب
+    </a>
+
 </body>
 </html>
