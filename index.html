@@ -1,168 +1,440 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المكتبة الوطنية للتحليلات المرضية | الإصدار الكامل</title>
-    <style>
-        :root {
-            --main-navy: #001219; --med-blue: #005f73; --action-teal: #0a9396;
-            --blood: #ae2012; --light-bg: #e9d8a6; --white: #ffffff;
-        }
-        body { background: #f4f4f9; color: #333; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        
-        /* Header */
-        header { background: var(--main-navy); color: white; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .search-box { background: rgba(255,255,255,0.15); border: none; padding: 10px 20px; border-radius: 25px; color: white; width: 300px; outline: none; }
+from pathlib import Path
 
-        /* Layout */
-        .wrapper { display: flex; flex: 1; overflow: hidden; }
-        
-        /* Sidebar */
-        aside { width: 320px; background: var(--white); border-left: 2px solid #ddd; overflow-y: auto; padding: 15px; }
-        .cat-title { background: var(--med-blue); color: white; padding: 8px 15px; border-radius: 5px; margin-top: 15px; font-size: 0.9rem; }
-        .lab-item { padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #eee; transition: 0.2s; font-size: 0.9rem; color: #555; }
-        .lab-item:hover { background: #f0f7f9; color: var(--med-blue); padding-right: 25px; }
-        .active-item { background: var(--action-teal) !important; color: white !important; font-weight: bold; border-radius: 5px; }
+content = r"""
+# نظام إدارة المختبرات والتحليلات المرضية والطلاب
 
-        /* Content Area */
-        main { flex: 1; overflow-y: auto; padding: 40px; background: #fff; }
-        .content-card { max-width: 900px; margin: 0 auto; display: none; animation: fadeIn 0.4s ease; }
-        .show { display: block; }
+## وصف المشروع
+منصة متكاملة لإدارة:
+- المرضى
+- التحليلات الطبية
+- الأجهزة المخبرية
+- الأطباء
+- الفواتير
+- الطلاب والمتدربين
+- الحضور والدرجات
+- التقارير والإحصائيات
+- الصلاحيات والمستخدمين
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+---
 
-        /* Typography */
-        .analysis-header { border-bottom: 4px solid var(--blood); padding-bottom: 10px; margin-bottom: 25px; }
-        .analysis-header h1 { margin: 0; color: var(--main-navy); font-size: 2.2rem; }
-        
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
-        .box { padding: 25px; border-radius: 15px; line-height: 1.8; position: relative; }
-        .theory-box { background: #f1f3f5; border-top: 5px solid var(--med-blue); }
-        .practical-box { background: #f0fdf4; border-top: 5px solid var(--action-teal); }
-        
-        .box h3 { margin-top: 0; color: var(--med-blue); display: flex; align-items: center; gap: 10px; }
-        .normal-range { background: #fff9db; padding: 20px; border-radius: 10px; margin-top: 30px; border: 1px dashed #fab005; font-weight: bold; }
+# التقنيات المقترحة
 
-        /* Footer */
-        footer { background: #eee; text-align: center; padding: 10px; font-size: 0.8rem; color: #777; }
-    </style>
-</head>
-<body>
+## Backend
+- Node.js + Express
+- PostgreSQL
+- Prisma ORM
+- JWT Authentication
+- Socket.IO
 
-<header>
-    <div style="font-weight: bold; font-size: 1.3rem;">مكتبة المختبر الطبية الشاملة</div>
-    <input type="text" class="search-box" id="search" placeholder="ابحث عن أي فحص..." onkeyup="search()">
-</header>
+## Frontend
+- React + Next.js
+- TailwindCSS
 
-<div class="wrapper">
-    <aside id="sidebar">
-        </aside>
+## Mobile
+- Flutter
 
-    <main id="content-display">
-        <div id="welcome-msg" style="text-align: center; margin-top: 100px; color: #aaa;">
-            <h2 style="font-size: 3rem;">🔬</h2>
-            <p>يرجى اختيار تحليل من القائمة الجانبية لعرض التفاصيل الكاملة</p>
-        </div>
-    </main>
-</div>
+---
 
-<script>
-    // قاعدة بيانات ضخمة تحتوي على كافة الأقسام والتحاليل
-    const database = [
-        {
-            category: "سحب الدم والتحضيرات",
-            labs: [
-                { id: "draw1", name: "سحب الدم الوريدي (Phlebotomy)", theory: "تعتمد جودة النتائج على سلامة العينة. اختيار الوريد (Median Cubital) يقلل من احتمالية إصابة الأعصاب. يجب تجنب سحب الدم من ذراع تحتوي على قسطرة مغذية.", practical: "1. تعقيم الموقع. 2. ربط التورنيكة < دقيقة. 3. إدخال الإبرة بزاوية 20 درجة. 4. ملء الأنابيب بترتيب: Blood Culture -> Citrate -> Serum -> Heparin -> EDTA.", normal: "يجب أن تكون العينة خالية من التحلل (Hemolysis) والتجلط (Clotting)." }
-            ]
-        },
-        {
-            category: "الكيمياء الحياتية (Biochemistry)",
-            labs: [
-                { id: "glu", name: "Glucose (سكر الدم)", theory: "قياس تركيز الجلوكوز لتشخيص السكري. الصيام (8-12 ساعة) ضروري للفحص الصائم.", practical: "عينة سيرم أو بلازما (أنبوب رمادي). طريقة Enzymatic GOD-PAP.", normal: "Fasting: 70-110 mg/dL | Random: < 140 mg/dL" },
-                { id: "cre", name: "Creatinine (الكرياتينين)", theory: "ناتج فضلات العضلات، يعتبر الأدق لتقييم كفاءة الكلى.", practical: "عينة سيرم. تفاعل Jaffe (تكون مركب ملون مع حامض البكريك).", normal: "Male: 0.7-1.3 | Female: 0.6-1.1 mg/dL" },
-                { id: "urea", name: "Blood Urea (اليوريا)", theory: "الناتج النهائي لاستقلاب البروتينات في الكبد.", practical: "عينة سيرم. طريقة Berthelot.", normal: "15-45 mg/dL" },
-                { id: "alt", name: "ALT / GPT (إنزيمات الكبد)", theory: "إنزيم يتواجد بكثرة في الكبد، ارتفاعه دليل على تلف الخلايا الكبدية.", practical: "عينة سيرم. تجنب التحلل (Hemolysis). طريقة Kinetic UV.", normal: "Up to 40 U/L" }
-            ]
-        },
-        {
-            category: "علم الدم (Hematology)",
-            labs: [
-                { id: "cbc", name: "CBC (صورة الدم الكاملة)", theory: "فحص شامل لخلايا الدم الحمراء والبيضاء والصفيحات. يشمل الـ Hb و PCV والمعايير الأخرى.", practical: "أنبوب EDTA (بنفسجي). يمزج 8 مرات هادئة. القراءة بجهاز الـ 5-part أو 3-part.", normal: "Hb: 12-17 g/dL | WBC: 4,000-11,000 | PLT: 150k-450k" },
-                { id: "esr", name: "ESR (سرعة الترسيب)", theory: "قياس سرعة هبوط الكريات، يرتفع في حالات الالتهابات الحادة والمزمنة.", practical: "أنبوب ويسترغرين (سترات صوديوم 4:1). القراءة بعد ساعة واحدة بالضبط.", normal: "Male: < 15 | Female: < 20 mm/hr" },
-                { id: "pt", name: "PT (زمن التخثر)", theory: "تقييم عوامل التخثر الخارجية (Extrinsic Pathway).", practical: "أنبوب سترات صوديوم (أزرق). نسبة الدم إلى المانع 9:1 حصراً. جهاز الـ Coagulometer.", normal: "11-13.5 Seconds" }
-            ]
-        },
-        {
-            category: "الهرمونات والفيروسات",
-            labs: [
-                { id: "tsh", name: "TSH (هرمون الغدة الدرقية)", theory: "المؤشر الأهم لنشاط أو خمول الغدة الدرقية.", practical: "عينة سيرم. تقنية الـ CLIA أو ELIZA.", normal: "0.45 - 4.5 uIU/mL" },
-                { id: "hcv", name: "HCV (التهاب الكبد ج)", theory: "الكشف عن الأجسام المضادة لفيروس الكبد C.", practical: "عينة سيرم. استخدام الكاسيت (Rapid Test) أو الـ ELIZA.", normal: "Negative" }
-            ]
-        }
-        // يمكن إضافة 100 تحليل إضافي هنا بنفس التنسيق
-    ];
+# هيكل المشروع
 
-    // توليد القائمة الجانبية
-    const sidebar = document.getElementById('sidebar');
-    const display = document.getElementById('content-display');
+```bash
+medical-system/
+│
+├── backend/
+│   ├── src/
+│   │   ├── modules/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── controllers/
+│   │   ├── prisma/
+│   │   └── app.js
+│
+├── frontend/
+│   ├── pages/
+│   ├── components/
+│   ├── layouts/
+│   └── services/
+│
+└── mobile/
+```
 
-    database.forEach(section => {
-        const title = document.createElement('div');
-        title.className = 'cat-title';
-        title.innerText = section.category;
-        sidebar.appendChild(title);
+---
 
-        section.labs.forEach(lab => {
-            const item = document.createElement('div');
-            item.className = 'lab-item';
-            item.innerText = lab.name;
-            item.onclick = () => showLab(lab, item);
-            sidebar.appendChild(item);
-        });
+# قاعدة البيانات
+
+## جدول المرضى
+
+```sql
+CREATE TABLE patients (
+    id SERIAL PRIMARY KEY,
+    full_name VARCHAR(255),
+    gender VARCHAR(20),
+    birth_date DATE,
+    phone VARCHAR(50),
+    address TEXT,
+    blood_type VARCHAR(10),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+---
+
+## جدول التحاليل
+
+```sql
+CREATE TABLE analyses (
+    id SERIAL PRIMARY KEY,
+    patient_id INTEGER REFERENCES patients(id),
+    analysis_name VARCHAR(255),
+    result TEXT,
+    status VARCHAR(50),
+    price DECIMAL(10,2),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+---
+
+## جدول الطلاب
+
+```sql
+CREATE TABLE students (
+    id SERIAL PRIMARY KEY,
+    full_name VARCHAR(255),
+    university VARCHAR(255),
+    stage VARCHAR(50),
+    email VARCHAR(255),
+    phone VARCHAR(50),
+    training_start DATE,
+    training_end DATE
+);
+```
+
+---
+
+## جدول الحضور
+
+```sql
+CREATE TABLE attendance (
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER REFERENCES students(id),
+    attendance_date DATE,
+    status VARCHAR(20)
+);
+```
+
+---
+
+## جدول المستخدمين والصلاحيات
+
+```sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE,
+    password TEXT,
+    role VARCHAR(50)
+);
+```
+
+---
+
+# نظام الصلاحيات
+
+## الأنواع
+- مدير النظام
+- طبيب
+- موظف مختبر
+- محاسب
+- طالب
+- مشرف تدريب
+
+---
+
+# Backend API
+
+## تسجيل الدخول
+
+```js
+router.post('/login', async (req, res) => {
+    const user = await prisma.users.findUnique({
+        where: { username: req.body.username }
     });
 
-    function showLab(lab, element) {
-        // تحديث التصميم النشط
-        document.querySelectorAll('.lab-item').forEach(i => i.classList.remove('active-item'));
-        element.classList.add('active-item');
-
-        // عرض المحتوى
-        display.innerHTML = `
-            <div class="content-card show">
-                <div class="analysis-header">
-                    <h1>${lab.name}</h1>
-                </div>
-                <div class="info-grid">
-                    <div class="box theory-box">
-                        <h3>📘 الجانب النظري</h3>
-                        <p>${lab.theory}</p>
-                    </div>
-                    <div class="box practical-box">
-                        <h3>🛠️ الجانب العملي</h3>
-                        <p>${lab.practical}</p>
-                    </div>
-                </div>
-                <div class="normal-range">
-                    📍 النسب الطبيعية (Normal Range): <br>
-                    ${lab.normal}
-                </div>
-            </div>
-        `;
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
     }
 
-    function search() {
-        let term = document.getElementById('search').value.toLowerCase();
-        let items = document.querySelectorAll('.lab-item');
-        items.forEach(item => {
-            if(item.innerText.toLowerCase().includes(term)) {
-                item.style.display = "block";
-            } else {
-                item.style.display = "none";
-            }
-        });
-    }
-</script>
+    const token = jwt.sign(
+        { id: user.id, role: user.role },
+        process.env.JWT_SECRET
+    );
 
-</body>
-</html>
+    res.json({ token });
+});
+```
+
+---
+
+# إضافة مريض
+
+```js
+router.post('/patients', async (req, res) => {
+    const patient = await prisma.patients.create({
+        data: req.body
+    });
+
+    res.json(patient);
+});
+```
+
+---
+
+# إضافة تحليل
+
+```js
+router.post('/analysis', async (req, res) => {
+    const analysis = await prisma.analyses.create({
+        data: req.body
+    });
+
+    res.json(analysis);
+});
+```
+
+---
+
+# إدارة الطلاب
+
+## إضافة طالب
+
+```js
+router.post('/students', async (req, res) => {
+    const student = await prisma.students.create({
+        data: req.body
+    });
+
+    res.json(student);
+});
+```
+
+---
+
+# واجهة React
+
+## صفحة المرضى
+
+```jsx
+export default function PatientsPage() {
+    return (
+        <div>
+            <h1>Patients</h1>
+        </div>
+    );
+}
+```
+
+---
+
+# لوحة التحكم
+
+## الإحصائيات
+- عدد المرضى
+- عدد التحاليل
+- الإيرادات
+- الطلاب المتدربين
+- الحضور اليومي
+- أكثر التحاليل طلباً
+
+---
+
+# نظام التقارير
+
+## تقارير PDF
+- تقارير التحاليل
+- تقارير الحضور
+- تقارير الأرباح
+- تقارير الطلاب
+
+---
+
+# مميزات إضافية
+
+## الذكاء الاصطناعي
+- اقتراح تشخيصات أولية
+- تحليل نتائج المختبر
+- كشف القيم الخطرة
+
+## الإشعارات
+- SMS
+- Email
+- WhatsApp
+
+## النسخ الاحتياطي
+- نسخ يومي تلقائي
+- استعادة كاملة
+
+---
+
+# الحماية
+
+## الأمان
+- تشفير كلمات المرور
+- JWT
+- صلاحيات متقدمة
+- حماية ضد SQL Injection
+- Rate Limiting
+
+---
+
+# إعداد الخادم
+
+```bash
+npm install
+npm run dev
+```
+
+---
+
+# Prisma Schema
+
+```prisma
+model Patient {
+  id        Int      @id @default(autoincrement())
+  full_name String
+  gender    String
+  phone     String
+  analyses  Analysis[]
+}
+
+model Analysis {
+  id            Int      @id @default(autoincrement())
+  analysis_name String
+  result        String
+  patient_id    Int
+  patient       Patient @relation(fields: [patient_id], references: [id])
+}
+```
+
+---
+
+# أفكار تطوير مستقبلية
+
+- تطبيق موبايل كامل
+- ربط أجهزة المختبر
+- QR Code
+- Barcode
+- طباعة تلقائية
+- أرشفة سحابية
+- نظام حجوزات
+- نظام دور إلكتروني
+
+---
+
+# نظام الطلاب الكامل
+
+## إدارة:
+- الدرجات
+- الامتحانات
+- التدريب العملي
+- تقييم المشرف
+- رفع الملفات
+- المحاضرات
+- الإعلانات
+- الشهادات
+
+---
+
+# مثال تقييم طالب
+
+```sql
+CREATE TABLE student_evaluations (
+    id SERIAL PRIMARY KEY,
+    student_id INTEGER REFERENCES students(id),
+    supervisor_name VARCHAR(255),
+    score INTEGER,
+    notes TEXT
+);
+```
+
+---
+
+# واجهة لوحة المدير
+
+## الأقسام
+- إدارة المرضى
+- إدارة التحاليل
+- إدارة الأجهزة
+- إدارة الموظفين
+- إدارة الطلاب
+- إدارة التقارير
+- الإعدادات
+
+---
+
+# بنية احترافية مقترحة
+
+## Backend Architecture
+- Repository Pattern
+- Service Layer
+- Clean Architecture
+- Microservices Ready
+
+---
+
+# مثال Middleware
+
+```js
+export const authMiddleware = (roles = []) => {
+    return (req, res, next) => {
+        const token = req.headers.authorization;
+
+        if (!token) {
+            return res.status(401).json({
+                message: "Unauthorized"
+            });
+        }
+
+        next();
+    };
+};
+```
+
+---
+
+# مثال Dashboard API
+
+```js
+router.get('/dashboard', async (req, res) => {
+
+    const patients = await prisma.patients.count();
+    const analyses = await prisma.analyses.count();
+    const students = await prisma.students.count();
+
+    res.json({
+        patients,
+        analyses,
+        students
+    });
+});
+```
+
+---
+
+# الخلاصة
+
+هذا المشروع يعتبر نواة قوية لبناء:
+- نظام مختبرات احترافي
+- منصة تدريب طلاب
+- إدارة شاملة للمؤسسة الطبية
+
+يمكن تطويره لاحقاً ليصبح:
+- SaaS Platform
+- نظام مستشفيات كامل
+- منصة ذكاء اصطناعي طبية
+"""
+
+path = Path("/mnt/data/medical_lab_system_full_guide.md")
+path.write_text(content, encoding="utf-8")
+
+print(f"Saved to {path}")
