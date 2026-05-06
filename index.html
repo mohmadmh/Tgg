@@ -3,80 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة المختبر الذكي</title>
+    <title>أكاديمية التحليلات المرضية</title>
     <style>
-        :root { --primary: #0052cc; --bg: #f4f7f6; --white: #ffffff; }
-        body { background-color: var(--bg); color: #333; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; padding: 0; }
+        :root { --med-blue: #0077b6; --light-blue: #ade8f4; --dark-text: #023e8a; --bg: #f8f9fa; }
+        body { background-color: var(--bg); color: #333; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; line-height: 1.6; }
         
-        /* Navbar */
-        nav { background: var(--primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .logo { font-weight: bold; font-size: 1.2rem; }
+        header { background: var(--med-blue); color: white; padding: 40px 20px; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); }
+        header h1 { margin: 0; font-size: 1.8rem; }
+        header p { margin-top: 10px; opacity: 0.9; }
 
-        .container { padding: 20px; max-width: 800px; margin: auto; }
+        .container { max-width: 900px; margin: -30px auto 50px; padding: 0 15px; }
 
-        /* Dashboard Cards */
-        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .stat-card { background: var(--white); padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--primary); }
-        .stat-card h3 { margin: 0; color: #666; font-size: 0.9rem; }
-        .stat-card p { font-size: 1.5rem; font-weight: bold; margin: 10px 0 0; color: var(--primary); }
-
-        /* Patient Form */
-        .card { background: var(--white); padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        h2 { font-size: 1.1rem; margin-bottom: 20px; color: var(--primary); border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        /* البطاقات التعليمية */
+        .lesson-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-right: 6px solid var(--med-blue); }
+        .lesson-card h2 { color: var(--dark-text); margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        .lesson-card h2 span { font-size: 1.5rem; }
         
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        
-        button { width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #003d99; }
+        .method-box { background: var(--light-blue); padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed var(--med-blue); }
+        .theory-tag { background: #e9ecef; color: #495057; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
 
-        .footer { text-align: center; margin-top: 30px; color: #888; font-size: 0.8rem; }
+        .steps-list { padding-right: 20px; }
+        .steps-list li { margin-bottom: 10px; position: relative; list-style: none; }
+        .steps-list li::before { content: "🔬"; position: absolute; right: -25px; }
+
+        .btn-expander { background: var(--med-blue); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">LabSystem Pro v1.0</div>
-        <div class="user-profile">مرحباً، تقني المختبر</div>
-    </nav>
+    <header>
+        <h1>أكاديمية التحليلات الطبية 📚</h1>
+        <p>شرح الطرق العلمية والنظريات المختبرية بأسلوب مبسط</p>
+    </header>
 
     <div class="container">
-        <div class="stats">
-            <div class="stat-card">
-                <h3>تحليلات اليوم</h3>
-                <p>12</p>
+        
+        <div class="lesson-card">
+            <span class="theory-tag">الجانب النظري: Hematology</span>
+            <h2><span>🩸</span> فحص CBC (صورة الدم الكاملة)</h2>
+            <p>يعد من أهم الفحوصات الأساسية لتقييم الحالة الصحية العامة والكشف عن فقر الدم أو الالتهابات.</p>
+            
+            <div class="method-box">
+                <strong>الطريقة العلمية:</strong> نستخدم طريقة التدفق الخلوي (Flow Cytometry) أو القياس الكهربائي (Electrical Impedance) لعد الخلايا.
             </div>
-            <div class="stat-card">
-                <h3>نتائج جاهزة</h3>
-                <p>5</p>
+
+            <h3>خطوات العمل (العملي):</h3>
+            <ul class="steps-list">
+                <li>سحب عينة دم وريدي في أنبوب يحتوي على مانع تخثر EDTA.</li>
+                <li>مزج العينة جيداً بجهاز الـ Mixer لمدة دقيقتين.</li>
+                <li>إدخال العينة في جهاز الـ Analyzer والتأكد من خلوها من التخثر (Clot).</li>
+                <li>تحليل النتائج ومقارنتها بالـ Normal Ranges حسب العمر والجنس.</li>
+            </ul>
+        </div>
+
+        <div class="lesson-card">
+            <span class="theory-tag">الجانب النظري: Biochemistry</span>
+            <h2><span>🧪</span> اختبار سكر الدم التراكمي (HbA1c)</h2>
+            <p>نظرية الفحص تعتمد على قياس نسبة الجلوكوز المرتبط بالهيموجلوبين في كريات الدم الحمراء خلال 120 يوماً.</p>
+            
+            <div class="method-box">
+                <strong>الطريقة العلمية:</strong> تقنية HPLC (الكروماتوغرافيا السائلة عالية الأداء) وهي الأدق عالمياً.
             </div>
+
+            <button class="btn-expander" onclick="alert('سيتم فتح فيديو توضيحي للطريقة العلمية قريباً!')">عرض الشرح المرئي</button>
         </div>
 
-        <div class="card">
-            <h2>تسجيل تحليل جديد</h2>
-            <form onsubmit="event.preventDefault(); alert('تم حفظ بيانات المريض بنجاح في قاعدة البيانات المؤقتة!');">
-                <label>اسم المريض الثلاثي:</label>
-                <input type="text" placeholder="مثال: محمد علي حسن" required>
-                
-                <label>نوع التحليل:</label>
-                <select>
-                    <option>CBC (صورة دم كاملة)</option>
-                    <option>HbA1c (السكر التراكمي)</option>
-                    <option>Lipid Profile (دهون الدم)</option>
-                    <option>Kidney Function (وظائف الكلى)</option>
-                    <option>TSH (الغدة الدرقية)</option>
-                </select>
-
-                <label>قيمة النتيجة:</label>
-                <input type="text" placeholder="أدخل النتيجة هنا...">
-
-                <button type="submit">حفظ النتيجة وإصدار التقرير</button>
-            </form>
-        </div>
-
-        <div class="footer">
-            نظام إدارة المختبرات الطبية - جميع الحقوق محفوظة لعام 2026
-        </div>
     </div>
+
+    <footer style="text-align: center; color: #888; padding-bottom: 20px;">
+        تم التطوير بواسطة: م.م المختبر الذكي
+    </footer>
 
 </body>
 </html>
