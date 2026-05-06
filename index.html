@@ -3,76 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أكاديمية التحليلات المرضية</title>
+    <title>منصة التحليلات التعليمية الشاملة</title>
     <style>
-        :root { --med-blue: #0077b6; --light-blue: #ade8f4; --dark-text: #023e8a; --bg: #f8f9fa; }
-        body { background-color: var(--bg); color: #333; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; line-height: 1.6; }
-        
-        header { background: var(--med-blue); color: white; padding: 40px 20px; text-align: center; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); }
-        header h1 { margin: 0; font-size: 1.8rem; }
-        header p { margin-top: 10px; opacity: 0.9; }
+        :root {
+            --primary-blue: #003049;
+            --secondary-blue: #669bbc;
+            --accent-red: #c1121f;
+            --bg-light: #fdf0d5;
+            --white: #ffffff;
+        }
 
-        .container { max-width: 900px; margin: -30px auto 50px; padding: 0 15px; }
+        body {
+            background-color: var(--bg-light);
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-        /* البطاقات التعليمية */
-        .lesson-card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-right: 6px solid var(--med-blue); }
-        .lesson-card h2 { color: var(--dark-text); margin-top: 0; display: flex; align-items: center; gap: 10px; }
-        .lesson-card h2 span { font-size: 1.5rem; }
-        
-        .method-box { background: var(--light-blue); padding: 15px; border-radius: 10px; margin: 15px 0; border: 1px dashed var(--med-blue); }
-        .theory-tag { background: #e9ecef; color: #495057; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        /* Header */
+        header {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
 
-        .steps-list { padding-right: 20px; }
-        .steps-list li { margin-bottom: 10px; position: relative; list-style: none; }
-        .steps-list li::before { content: "🔬"; position: absolute; right: -25px; }
+        /* Navigation Menu */
+        .nav-menu {
+            display: flex;
+            justify-content: space-around;
+            background: var(--secondary-blue);
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-        .btn-expander { background: var(--med-blue); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        .nav-item {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px 15px;
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+
+        .nav-item.active { background: var(--primary-blue); }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Lesson Styles */
+        .card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .theory-box {
+            background: #e9ecef;
+            border-right: 5px solid var(--accent-red);
+            padding: 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+
+        .practical-box {
+            background: #d1e7dd;
+            border-right: 5px solid #0f5132;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        /* Quiz Styles */
+        .quiz-option {
+            display: block;
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-option:hover { background: #eee; }
+
+        footer {
+            margin-top: auto;
+            background: var(--primary-blue);
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>أكاديمية التحليلات الطبية 📚</h1>
-        <p>شرح الطرق العلمية والنظريات المختبرية بأسلوب مبسط</p>
+        <h1>أكاديمية العلوم الطبية المختبرية</h1>
+        <p>نظام تعليمي متكامل للطلاب والتقنيين</p>
     </header>
 
-    <div class="container">
-        
-        <div class="lesson-card">
-            <span class="theory-tag">الجانب النظري: Hematology</span>
-            <h2><span>🩸</span> فحص CBC (صورة الدم الكاملة)</h2>
-            <p>يعد من أهم الفحوصات الأساسية لتقييم الحالة الصحية العامة والكشف عن فقر الدم أو الالتهابات.</p>
-            
-            <div class="method-box">
-                <strong>الطريقة العلمية:</strong> نستخدم طريقة التدفق الخلوي (Flow Cytometry) أو القياس الكهربائي (Electrical Impedance) لعد الخلايا.
-            </div>
-
-            <h3>خطوات العمل (العملي):</h3>
-            <ul class="steps-list">
-                <li>سحب عينة دم وريدي في أنبوب يحتوي على مانع تخثر EDTA.</li>
-                <li>مزج العينة جيداً بجهاز الـ Mixer لمدة دقيقتين.</li>
-                <li>إدخال العينة في جهاز الـ Analyzer والتأكد من خلوها من التخثر (Clot).</li>
-                <li>تحليل النتائج ومقارنتها بالـ Normal Ranges حسب العمر والجنس.</li>
-            </ul>
-        </div>
-
-        <div class="lesson-card">
-            <span class="theory-tag">الجانب النظري: Biochemistry</span>
-            <h2><span>🧪</span> اختبار سكر الدم التراكمي (HbA1c)</h2>
-            <p>نظرية الفحص تعتمد على قياس نسبة الجلوكوز المرتبط بالهيموجلوبين في كريات الدم الحمراء خلال 120 يوماً.</p>
-            
-            <div class="method-box">
-                <strong>الطريقة العلمية:</strong> تقنية HPLC (الكروماتوغرافيا السائلة عالية الأداء) وهي الأدق عالمياً.
-            </div>
-
-            <button class="btn-expander" onclick="alert('سيتم فتح فيديو توضيحي للطريقة العلمية قريباً!')">عرض الشرح المرئي</button>
-        </div>
-
+    <div class="nav-menu">
+        <div class="nav-item active" onclick="showSection('theory')">المفاهيم النظرية</div>
+        <div class="nav-item" onclick="showSection('practical')">الطرق العلمية</div>
+        <div class="nav-item" onclick="showSection('quiz')">اختبر نفسك</div>
     </div>
 
-    <footer style="text-align: center; color: #888; padding-bottom: 20px;">
-        تم التطوير بواسطة: م.م المختبر الذكي
+    <div id="theory" class="content-section active">
+        <div class="card">
+            <h2>🔬 نظرية قياس الطيف الضوئي (Spectrophotometry)</h2>
+            <div class="theory-box">
+                <strong>قانون بير-لامبرت:</strong> تنص النظرية على أن كمية الضوء الممتص بواسطة محلول تتناسب طردياً مع تركيز المادة المذابة وطول المسار الضوئي.
+            </div>
+            <p>تستخدم هذه النظرية في معظم أجهزة الكيمياء الحيوية لتقدير تركيز الجلوكوز، اليوريا، والكوليسترول في السيرم.</p>
+        </div>
+
+        <div class="card">
+            <h2>🧬 مفاهيم المناعة (Immunology)</h2>
+            <p>تعتمد الفحوصات المصلية على مبدأ الارتباط النوعي بين المستضد (Antigen) والجسم المضاد (Antibody).</p>
+        </div>
+    </div>
+
+    <div id="practical" class="content-section">
+        <div class="card">
+            <h2>🧪 طريقة عمل فحص الـ Widal Test</h2>
+            <div class="practical-box">
+                <strong>الهدف:</strong> الكشف النوعي والكمي عن الأجسام المضادة لبكتيريا السالمونيلا المسببة للتيفوئيد.
+            </div>
+            <ol>
+                <li>وضع قطرة من السيرم على السلايد في أربع دوائر.</li>
+                <li>إضافة الأنتيجينات (O, H, AH, BH) لكل دائرة.</li>
+                <li>التحريك لمدة دقيقتين وملاحظة حدوث التلازن (Agglutination).</li>
+            </ol>
+        </div>
+    </div>
+
+    <div id="quiz" class="content-section">
+        <div class="card">
+            <h2>❓ سؤال التقييم السريع</h2>
+            <p>ما هو مانع التخثر المستخدم في فحص صورة الدم الكاملة (CBC)؟</p>
+            <div class="quiz-option" onclick="checkAnswer(false)">Heparin</div>
+            <div class="quiz-option" onclick="checkAnswer(true)">EDTA</div>
+            <div class="quiz-option" onclick="checkAnswer(false)">Sodium Citrate</div>
+        </div>
+    </div>
+
+    <footer>
+        حقوق النشر © 2026 | منصة التعليم الطبي المستمر
     </footer>
+
+    <script>
+        function showSection(sectionId) {
+            // إخفاء كل الأقسام
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            // إزالة الحالة النشطة من القائمة
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            // إظهار القسم المطلوب
+            document.getElementById(sectionId).classList.add('active');
+            // تفعيل زر القائمة
+            event.currentTarget.classList.add('active');
+        }
+
+        function checkAnswer(isCorrect) {
+            if(isCorrect) {
+                alert("إجابة صحيحة! برافو دكتور.");
+            } else {
+                alert("إجابة خاطئة. EDTA هو المانع الصحيح للحفاظ على شكل الخلايا.");
+            }
+        }
+    </script>
 
 </body>
 </html>
