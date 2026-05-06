@@ -1,440 +1,166 @@
-from pathlib import Path
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إدارة المختبر والتدريب الشامل</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap');
+        body { font-family: 'Tajawal', sans-serif; background-color: #f3f4f6; }
+        .sidebar-item:hover, .sidebar-item.active { background-color: #1e293b; border-right: 4px solid #3b82f6; }
+        .card-shadow { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
 
-content = r"""
-# نظام إدارة المختبرات والتحليلات المرضية والطلاب
-
-## وصف المشروع
-منصة متكاملة لإدارة:
-- المرضى
-- التحليلات الطبية
-- الأجهزة المخبرية
-- الأطباء
-- الفواتير
-- الطلاب والمتدربين
-- الحضور والدرجات
-- التقارير والإحصائيات
-- الصلاحيات والمستخدمين
-
----
-
-# التقنيات المقترحة
-
-## Backend
-- Node.js + Express
-- PostgreSQL
-- Prisma ORM
-- JWT Authentication
-- Socket.IO
-
-## Frontend
-- React + Next.js
-- TailwindCSS
-
-## Mobile
-- Flutter
-
----
-
-# هيكل المشروع
-
-```bash
-medical-system/
-│
-├── backend/
-│   ├── src/
-│   │   ├── modules/
-│   │   ├── middleware/
-│   │   ├── routes/
-│   │   ├── services/
-│   │   ├── controllers/
-│   │   ├── prisma/
-│   │   └── app.js
-│
-├── frontend/
-│   ├── pages/
-│   ├── components/
-│   ├── layouts/
-│   └── services/
-│
-└── mobile/
-```
-
----
-
-# قاعدة البيانات
-
-## جدول المرضى
-
-```sql
-CREATE TABLE patients (
-    id SERIAL PRIMARY KEY,
-    full_name VARCHAR(255),
-    gender VARCHAR(20),
-    birth_date DATE,
-    phone VARCHAR(50),
-    address TEXT,
-    blood_type VARCHAR(10),
-    created_at TIMESTAMP DEFAULT NOW()
-);
-```
-
----
-
-## جدول التحاليل
-
-```sql
-CREATE TABLE analyses (
-    id SERIAL PRIMARY KEY,
-    patient_id INTEGER REFERENCES patients(id),
-    analysis_name VARCHAR(255),
-    result TEXT,
-    status VARCHAR(50),
-    price DECIMAL(10,2),
-    created_at TIMESTAMP DEFAULT NOW()
-);
-```
-
----
-
-## جدول الطلاب
-
-```sql
-CREATE TABLE students (
-    id SERIAL PRIMARY KEY,
-    full_name VARCHAR(255),
-    university VARCHAR(255),
-    stage VARCHAR(50),
-    email VARCHAR(255),
-    phone VARCHAR(50),
-    training_start DATE,
-    training_end DATE
-);
-```
-
----
-
-## جدول الحضور
-
-```sql
-CREATE TABLE attendance (
-    id SERIAL PRIMARY KEY,
-    student_id INTEGER REFERENCES students(id),
-    attendance_date DATE,
-    status VARCHAR(20)
-);
-```
-
----
-
-## جدول المستخدمين والصلاحيات
-
-```sql
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(255) UNIQUE,
-    password TEXT,
-    role VARCHAR(50)
-);
-```
-
----
-
-# نظام الصلاحيات
-
-## الأنواع
-- مدير النظام
-- طبيب
-- موظف مختبر
-- محاسب
-- طالب
-- مشرف تدريب
-
----
-
-# Backend API
-
-## تسجيل الدخول
-
-```js
-router.post('/login', async (req, res) => {
-    const user = await prisma.users.findUnique({
-        where: { username: req.body.username }
-    });
-
-    if (!user) {
-        return res.status(404).json({ message: "User not found" });
-    }
-
-    const token = jwt.sign(
-        { id: user.id, role: user.role },
-        process.env.JWT_SECRET
-    );
-
-    res.json({ token });
-});
-```
-
----
-
-# إضافة مريض
-
-```js
-router.post('/patients', async (req, res) => {
-    const patient = await prisma.patients.create({
-        data: req.body
-    });
-
-    res.json(patient);
-});
-```
-
----
-
-# إضافة تحليل
-
-```js
-router.post('/analysis', async (req, res) => {
-    const analysis = await prisma.analyses.create({
-        data: req.body
-    });
-
-    res.json(analysis);
-});
-```
-
----
-
-# إدارة الطلاب
-
-## إضافة طالب
-
-```js
-router.post('/students', async (req, res) => {
-    const student = await prisma.students.create({
-        data: req.body
-    });
-
-    res.json(student);
-});
-```
-
----
-
-# واجهة React
-
-## صفحة المرضى
-
-```jsx
-export default function PatientsPage() {
-    return (
-        <div>
-            <h1>Patients</h1>
+    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-xl">
+        <div class="p-6 text-2xl font-bold border-b border-slate-700 flex items-center gap-2">
+            <i class="fas fa-microscope text-blue-400"></i>
+            <span>مختبر الذكاء</span>
         </div>
-    );
-}
-```
+        <nav class="flex-1 p-4 space-y-2">
+            <div onclick="showSection('dashboard')" class="sidebar-item active p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
+                <i class="fas fa-chart-line"></i> <span>لوحة الإحصائيات</span>
+            </div>
+            <div onclick="showSection('patients')" class="sidebar-item p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
+                <i class="fas fa-user-injured"></i> <span>إدارة المرضى</span>
+            </div>
+            <div onclick="showSection('analysis')" class="sidebar-item p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
+                <i class="fas fa-flask"></i> <span>المكتبة والتحاليل</span>
+            </div>
+            <div onclick="showSection('students')" class="sidebar-item p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
+                <i class="fas fa-user-graduate"></i> <span>شؤون الطلاب</span>
+            </div>
+            <div onclick="showSection('settings')" class="sidebar-item p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
+                <i class="fas fa-cog"></i> <span>الإعدادات</span>
+            </div>
+        </nav>
+        <div class="p-4 border-t border-slate-700 text-sm text-slate-400">
+            الإصدار 2.0.1 (Prisma Ready)
+        </div>
+    </aside>
 
----
+    <main class="flex-1 flex flex-col overflow-y-auto">
+        <header class="bg-white p-4 shadow-sm flex justify-between items-center px-8">
+            <h2 id="section-title" class="text-xl font-bold text-slate-800">لوحة الإحصائيات</h2>
+            <div class="flex items-center gap-4">
+                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold">متصل بـ SQL</span>
+                <i class="fas fa-bell text-slate-400"></i>
+                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">AD</div>
+            </div>
+        </header>
 
-# لوحة التحكم
+        <div class="p-8">
+            
+            <section id="dashboard-sec" class="content-section grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl card-shadow border-b-4 border-blue-500">
+                    <p class="text-slate-500 text-sm">إجمالي المرضى</p>
+                    <h3 class="text-3xl font-bold">1,240</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl card-shadow border-b-4 border-red-500">
+                    <p class="text-slate-500 text-sm">تحاليل قيد الانتظار</p>
+                    <h3 class="text-3xl font-bold">14</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl card-shadow border-b-4 border-green-500">
+                    <p class="text-slate-500 text-sm">الطلاب المتدربين</p>
+                    <h3 class="text-3xl font-bold">85</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl card-shadow border-b-4 border-purple-500">
+                    <p class="text-slate-500 text-sm">إيرادات اليوم</p>
+                    <h3 class="text-3xl font-bold">450k IQD</h3>
+                </div>
+            </section>
 
-## الإحصائيات
-- عدد المرضى
-- عدد التحاليل
-- الإيرادات
-- الطلاب المتدربين
-- الحضور اليومي
-- أكثر التحاليل طلباً
+            <section id="patients-sec" class="content-section hidden space-y-6">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <div class="flex justify-between mb-4">
+                        <h3 class="font-bold text-lg">سجل المرضى الأخير</h3>
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">+ إضافة مريض جديد</button>
+                    </div>
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-600">
+                                <th class="p-3 border-b">الاسم الكامل</th>
+                                <th class="p-3 border-b">رقم الهاتف</th>
+                                <th class="p-3 border-b">آخر تحليل</th>
+                                <th class="p-3 border-b">الحالة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-3 border-b">أحمد علي محمد</td>
+                                <td class="p-3 border-b">0770XXXXXXX</td>
+                                <td class="p-3 border-b text-blue-600 font-bold">Lipid Profile</td>
+                                <td class="p-3 border-b text-green-600">مكتمل</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
----
+            <section id="analysis-sec" class="content-section hidden grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md border-r-8 border-blue-900">
+                    <h3 class="font-bold text-xl text-blue-900 mb-2">CBC - صورة الدم الكاملة</h3>
+                    <p class="text-sm text-slate-600 mb-4 font-bold text-red-600 underline">الجانب النظري:</p>
+                    <p class="text-sm leading-relaxed mb-4">فحص شامل لتقييم جميع أنواع خلايا الدم. يستخدم لتشخيص فقر الدم، الالتهابات الناتجة عن البكتيريا أو الفيروسات، واضطرابات التخثر.</p>
+                    <p class="text-sm text-slate-600 mb-4 font-bold text-green-700 underline">الجانب العملي:</p>
+                    <ul class="text-sm list-disc list-inside space-y-1 mb-4">
+                        <li>استخدام أنبوب EDTA (الأرجواني).</li>
+                        <li>المزج الفوري والهادئ للعينة.</li>
+                        <li>معايرة الجهاز بمحلول السيطرة (Control) قبل البدء.</li>
+                    </ul>
+                    <div class="bg-blue-50 p-3 rounded-lg text-sm font-bold text-blue-800">
+                        المدى الطبيعي (Hb): 13.5 - 17.5 g/dL (للذكور)
+                    </div>
+                </div>
+                </section>
 
-# نظام التقارير
+            <section id="students-sec" class="content-section hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                        <i class="fas fa-calendar-check text-4xl text-green-500 mb-4"></i>
+                        <h4 class="font-bold">الحضور والغياب</h4>
+                        <button class="mt-4 bg-slate-100 px-4 py-2 rounded text-sm hover:bg-slate-200">عرض السجل</button>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                        <i class="fas fa-star text-4xl text-yellow-500 mb-4"></i>
+                        <h4 class="font-bold">تقييم الأداء العملي</h4>
+                        <button class="mt-4 bg-slate-100 px-4 py-2 rounded text-sm hover:bg-slate-200">إضافة تقييم</button>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-md text-center">
+                        <i class="fas fa-file-pdf text-4xl text-red-500 mb-4"></i>
+                        <h4 class="font-bold">شهادات التدريب</h4>
+                        <button class="mt-4 bg-slate-100 px-4 py-2 rounded text-sm hover:bg-slate-200">إصدار شهادة</button>
+                    </div>
+                </div>
+            </section>
 
-## تقارير PDF
-- تقارير التحاليل
-- تقارير الحضور
-- تقارير الأرباح
-- تقارير الطلاب
+        </div>
+    </main>
 
----
+    <script>
+        function showSection(sectionId) {
+            // إخفاء كل الأقسام
+            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden'));
+            // إظهار القسم المطلوب
+            document.getElementById(sectionId + '-sec').classList.remove('hidden');
+            
+            // تحديث العنوان
+            const titles = {
+                'dashboard': 'لوحة الإحصائيات',
+                'patients': 'إدارة المرضى والسجلات',
+                'analysis': 'مكتبة التحاليل الطبية الشاملة',
+                'students': 'إدارة الطلاب والمتدربين',
+                'settings': 'الإعدادات المتقدمة'
+            };
+            document.getElementById('section-title').innerText = titles[sectionId];
 
-# مميزات إضافية
-
-## الذكاء الاصطناعي
-- اقتراح تشخيصات أولية
-- تحليل نتائج المختبر
-- كشف القيم الخطرة
-
-## الإشعارات
-- SMS
-- Email
-- WhatsApp
-
-## النسخ الاحتياطي
-- نسخ يومي تلقائي
-- استعادة كاملة
-
----
-
-# الحماية
-
-## الأمان
-- تشفير كلمات المرور
-- JWT
-- صلاحيات متقدمة
-- حماية ضد SQL Injection
-- Rate Limiting
-
----
-
-# إعداد الخادم
-
-```bash
-npm install
-npm run dev
-```
-
----
-
-# Prisma Schema
-
-```prisma
-model Patient {
-  id        Int      @id @default(autoincrement())
-  full_name String
-  gender    String
-  phone     String
-  analyses  Analysis[]
-}
-
-model Analysis {
-  id            Int      @id @default(autoincrement())
-  analysis_name String
-  result        String
-  patient_id    Int
-  patient       Patient @relation(fields: [patient_id], references: [id])
-}
-```
-
----
-
-# أفكار تطوير مستقبلية
-
-- تطبيق موبايل كامل
-- ربط أجهزة المختبر
-- QR Code
-- Barcode
-- طباعة تلقائية
-- أرشفة سحابية
-- نظام حجوزات
-- نظام دور إلكتروني
-
----
-
-# نظام الطلاب الكامل
-
-## إدارة:
-- الدرجات
-- الامتحانات
-- التدريب العملي
-- تقييم المشرف
-- رفع الملفات
-- المحاضرات
-- الإعلانات
-- الشهادات
-
----
-
-# مثال تقييم طالب
-
-```sql
-CREATE TABLE student_evaluations (
-    id SERIAL PRIMARY KEY,
-    student_id INTEGER REFERENCES students(id),
-    supervisor_name VARCHAR(255),
-    score INTEGER,
-    notes TEXT
-);
-```
-
----
-
-# واجهة لوحة المدير
-
-## الأقسام
-- إدارة المرضى
-- إدارة التحاليل
-- إدارة الأجهزة
-- إدارة الموظفين
-- إدارة الطلاب
-- إدارة التقارير
-- الإعدادات
-
----
-
-# بنية احترافية مقترحة
-
-## Backend Architecture
-- Repository Pattern
-- Service Layer
-- Clean Architecture
-- Microservices Ready
-
----
-
-# مثال Middleware
-
-```js
-export const authMiddleware = (roles = []) => {
-    return (req, res, next) => {
-        const token = req.headers.authorization;
-
-        if (!token) {
-            return res.status(401).json({
-                message: "Unauthorized"
-            });
+            // تحديث نشاط القائمة الجانبية
+            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
         }
-
-        next();
-    };
-};
-```
-
----
-
-# مثال Dashboard API
-
-```js
-router.get('/dashboard', async (req, res) => {
-
-    const patients = await prisma.patients.count();
-    const analyses = await prisma.analyses.count();
-    const students = await prisma.students.count();
-
-    res.json({
-        patients,
-        analyses,
-        students
-    });
-});
-```
-
----
-
-# الخلاصة
-
-هذا المشروع يعتبر نواة قوية لبناء:
-- نظام مختبرات احترافي
-- منصة تدريب طلاب
-- إدارة شاملة للمؤسسة الطبية
-
-يمكن تطويره لاحقاً ليصبح:
-- SaaS Platform
-- نظام مستشفيات كامل
-- منصة ذكاء اصطناعي طبية
-"""
-
-path = Path("/mnt/data/medical_lab_system_full_guide.md")
-path.write_text(content, encoding="utf-8")
-
-print(f"Saved to {path}")
+    </script>
+</body>
+</html>
