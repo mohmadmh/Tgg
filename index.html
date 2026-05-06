@@ -3,137 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنصة المتكاملة للتحليلات المرضية</title>
+    <title>موسوعة التحليلات الطبية الشاملة</title>
     <style>
         :root {
-            --primary: #003049; --secondary: #669bbc; --accent: #c1121f;
-            --light: #fdf0d5; --white: #ffffff; --green: #2d6a4f;
+            --primary: #023e8a; --secondary: #0077b6; --blood: #9b2226;
+            --light: #f8f9fa; --white: #ffffff; --text: #212529;
         }
-        body { background: var(--light); color: #333; font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; }
+        body { background: var(--light); color: var(--text); font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; }
         
-        /* Navbar */
-        nav { background: var(--primary); color: white; padding: 1rem; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; }
-        .nav-links { display: flex; gap: 15px; }
-        .nav-links div { cursor: pointer; font-size: 0.9rem; }
+        /* Navigation */
+        nav { background: var(--primary); color: white; padding: 1rem; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
+        .nav-links div { cursor: pointer; padding: 6px 10px; border-radius: 5px; font-size: 0.8rem; background: rgba(255,255,255,0.1); transition: 0.3s; }
+        .nav-links div:hover { background: var(--secondary); }
 
-        .container { max-width: 1000px; margin: 20px auto; padding: 10px; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
 
-        /* Welcome Section */
-        .hero { background: var(--white); padding: 40px; border-radius: 20px; text-align: center; border-bottom: 5px solid var(--secondary); margin-bottom: 30px; }
+        /* Sections */
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Login */
+        .login-card { background: white; padding: 40px; border-radius: 20px; max-width: 400px; margin: 80px auto; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; border-top: 8px solid var(--primary); }
+        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .btn-main { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
+
+        /* Lesson Content */
+        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-right: 6px solid var(--secondary); }
+        .card h2 { color: var(--primary); margin-top: 0; font-size: 1.2rem; }
+        .section-tag { background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; }
         
-        /* Lesson Cards */
-        .card { background: white; border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .tag { background: var(--secondary); color: white; padding: 2px 10px; border-radius: 5px; font-size: 0.8rem; }
-        
-        /* Interactive Calculator */
-        .calc-box { background: var(--primary); color: white; padding: 20px; border-radius: 15px; margin: 20px 0; }
-        .calc-box input { padding: 10px; width: 80%; margin: 10px 0; border-radius: 5px; border: none; }
+        .method-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .theory { background: #f1f5f9; padding: 12px; border-radius: 8px; font-size: 0.9rem; }
+        .practical { background: #fff1f2; padding: 12px; border-radius: 8px; font-size: 0.9rem; border-right: 3px solid var(--blood); }
 
-        /* Quiz */
-        .quiz-option { display: block; background: #eee; padding: 12px; margin: 8px 0; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-        .quiz-option:hover { background: #ddd; }
+        .blood-draw-img { width: 100%; height: 300px; background: #eee url('https://images.unsplash.com/photo-1579152438802-046176b5ca23?q=80&w=1000') center/cover; border-radius: 12px; margin: 15px 0; }
 
-        .steps { border-right: 3px solid var(--accent); padding-right: 15px; margin: 15px 0; }
-        
-        footer { background: var(--primary); color: white; text-align: center; padding: 20px; margin-top: 50px; }
-
-        .hidden { display: none; }
+        footer { text-align: center; padding: 40px; background: #eee; color: #666; margin-top: 50px; }
     </style>
 </head>
 <body>
 
-<nav>
-    <div style="font-weight: bold;">Lab Academy V4.0</div>
-    <div class="nav-links">
-        <div onclick="showPage('home')">الرئيسية</div>
-        <div onclick="showPage('lessons')">الدروس</div>
-        <div onclick="showPage('tools')">أدوات</div>
-        <div onclick="showPage('exams')">اختبارات</div>
+<div id="login-page" class="page active">
+    <div class="login-card">
+        <h1>LabAcademy Pro</h1>
+        <p>المنصة التعليمية الشاملة لتقنيي المختبرات</p>
+        <input type="text" id="user" placeholder="اسم الطالب">
+        <input type="password" placeholder="كلمة المرور">
+        <button class="btn-main" onclick="login()">دخول للموسوعة</button>
     </div>
-</nav>
+</div>
 
-<div class="container">
-    
-    <div id="home" class="page hero">
-        <h1>مرحباً بك في مستقبلك كتقني تحليلات 🔬</h1>
-        <p>المرجع الأول لطلاب المختبرات الطبية في العراق. اجمع بين العلم النظري والخبرة العملية.</p>
-        <button onclick="showPage('lessons')" style="background: var(--accent); color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer;">ابدأ التعلم الآن</button>
-    </div>
+<div id="app" class="page">
+    <nav>
+        <div style="font-weight: bold;">موسوعة التحليلات</div>
+        <div class="nav-links">
+            <div onclick="showP('draw')">سحب الدم</div>
+            <div onclick="showP('bio')">الكيمياء</div>
+            <div onclick="showP('hem')">علم الدم</div>
+            <div onclick="showP('hormone')">الهرمونات</div>
+            <div onclick="showP('micro')">الأحياء</div>
+            <div onclick="showP('ask')">استفسار</div>
+        </div>
+    </nav>
 
-    <div id="lessons" class="page hidden">
-        <div class="card">
-            <span class="tag">Biochemistry</span>
-            <h2>1. مفاهيم الامتصاصية (Absorbance)</h2>
-            <p><strong>النظرية:</strong> تعتمد الكيمياء السريرية على تحويل المادة إلى ملونة وقياس شدتها.</p>
-            <div class="steps">
-                <strong>الخطوات العملية:</strong>
-                <p>1. تحضير الـ Blank لتصفير الجهاز.</p>
-                <p>2. إضافة الـ Reagent لعينة السيرم.</p>
-                <p>3. القراءة عند طول موجي محدد (مثلاً 505nm للسكر).</p>
+    <div class="container">
+        
+        <div id="draw" class="page">
+            <div class="card">
+                <span class="section-tag">Phlebotomy</span>
+                <h2>دليل سحب الدم الوريدي الاحترافي</h2>
+                <div class="blood-draw-img"></div>
+                <div class="method-group">
+                    <div class="theory"><strong>نظرياً:</strong> يعتمد نجاح السحب على معرفة تشريح الأوردة (Cephalic, Basilic, Median Cubital).</div>
+                    <div class="practical"><strong>عملياً:</strong> زاوية الإدخال 15-30 درجة. تأكد من سحب الـ Tourniquet قبل إخراج الإبرة لتجنب الـ Hematoma.</div>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <span class="tag">Hematology</span>
-            <h2>2. فحص فصائل الدم (Blood Grouping)</h2>
-            <p>تعتمد على تفاعل الأنتيجين الموجود على سطح الكريات مع الأجسام المضادة المضافة.</p>
-            <div class="steps">
-                <strong>النتيجة:</strong> حدوث التلازن (Agglutination) يعني وجود الأنتيجين.
+        <div id="bio" class="page">
+            <div class="card">
+                <h2>1. وظائف الكلى (RFT)</h2>
+                <p>تشمل Urea, Creatinine, Uric Acid.</p>
+                <div class="method-group">
+                    <div class="theory">نظرياً: قياس كفاءة الترشيح في الكلى.</div>
+                    <div class="practical">عملياً: عينة سيرم، فحص ملون (Colorimetric).</div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>2. وظائف الكبد (LFT)</h2>
+                <p>تشمل GPT, GOT, ALP, Bilirubin (TSB).</p>
+            </div>
+            <div class="card">
+                <h2>3. الدهون (Lipid Profile)</h2>
+                <p>Cholesterol, Triglycerides, HDL, LDL.</p>
             </div>
         </div>
-    </div>
 
-    <div id="tools" class="page hidden">
-        <div class="card calc-box">
-            <h3>🧮 حاسبة معامل التصحيح (Dilution Factor)</h3>
-            <p>إذا قمت بتخفيف العينة، أدخل القيم هنا للحصول على النتيجة النهائية:</p>
-            <input type="number" id="res" placeholder="النتيجة قبل التخفيف">
-            <input type="number" id="dil" placeholder="معامل التخفيف (مثلاً 2 أو 10)">
-            <button onclick="calculate()" style="width: 100%; padding: 10px; background: var(--secondary); border: none; color: white; cursor: pointer;">احسب النتيجة النهائية</button>
-            <h2 id="final-res"></h2>
+        <div id="hem" class="page">
+            <div class="card">
+                <h2>1. صورة الدم الكاملة (CBC)</h2>
+                <div class="method-group">
+                    <div class="theory">نظرياً: عد كريات الدم WBC, RBC, PLT.</div>
+                    <div class="practical">عملياً: أنبوب EDTA، استخدام جهاز الـ 3-Diff أو 5-Diff.</div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>2. فصائل الدم (Blood Group)</h2>
+                <p>طريقة الـ Slide أو الـ Tube لاكتشاف مستضدات A, B, Rh.</p>
+            </div>
         </div>
-    </div>
 
-    <div id="exams" class="page hidden">
-        <div class="card">
-            <h2>📝 اختبار سريع: الأحياء المجهرية</h2>
-            <p>صبغة "جرام" تستخدم لتمييز البكتيريا بناءً على تركيب:</p>
-            <div class="quiz-option" onclick="answer(false)">النواة</div>
-            <div class="quiz-option" onclick="answer(true)">جدار الخلية</div>
-            <div class="quiz-option" onclick="answer(false)">السيتوبلازم</div>
+        <div id="hormone" class="page">
+            <div class="card">
+                <h2>1. الغدة الدرقية (Thyroid Profile)</h2>
+                <p>TSH, T3, T4. تستخدم تقنية الـ ELIZA أو CLIA.</p>
+            </div>
+            <div class="card">
+                <h2>2. الهرمونات الجنسية</h2>
+                <p>LH, FSH, Prolactin, Testosterone.</p>
+            </div>
         </div>
-    </div>
 
+        <div id="ask" class="page">
+            <div class="card">
+                <h2>أرسل استفسارك العلمي</h2>
+                <input type="text" placeholder="الموضوع">
+                <textarea rows="5" placeholder="اشرح مشكلتك المختبرية هنا..."></textarea>
+                <button class="btn-main">إرسال للخبراء</button>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <footer>
-    <p>تم التصميم بواسطة م.م المختبر | 2026</p>
-    <p>جميع الحقوق محفوظة للمنصة التعليمية</p>
+    <p>تم تطويره بواسطة: تقني مختبر | 2026</p>
 </footer>
 
 <script>
-    // نظام التنقل
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
-    }
-
-    // نظام الحاسبة
-    function calculate() {
-        let r = document.getElementById('res').value;
-        let d = document.getElementById('dil').value;
-        if(r && d) {
-            document.getElementById('final-res').innerText = "النتيجة النهائية: " + (r * d);
+    function login() {
+        if(document.getElementById('user').value) {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            showP('draw');
         }
     }
 
-    // نظام الاختبارات
-    function answer(correct) {
-        if(correct) {
-            alert("إجابة صحيحة! جدار الخلية (Cell Wall) هو الذي يمتص الصبغة.");
-        } else {
-            alert("حاول مرة أخرى! تذكر Peptidoglycan في جدار البكتيريا.");
-        }
+    function showP(id) {
+        const pages = ['draw', 'bio', 'hem', 'hormone', 'micro', 'ask'];
+        pages.forEach(p => {
+            const el = document.getElementById(p);
+            if(el) el.style.display = 'none';
+        });
+        document.getElementById(id).style.display = 'block';
     }
 </script>
 
