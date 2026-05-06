@@ -3,161 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موسوعة التحليلات الطبية الشاملة</title>
+    <title>مكتبة التقني الطبي الشاملة</title>
     <style>
         :root {
-            --primary: #023e8a; --secondary: #0077b6; --blood: #9b2226;
-            --light: #f8f9fa; --white: #ffffff; --text: #212529;
+            --primary: #023e8a; --secondary: #0077b6; --accent: #d00000;
+            --bg: #f0f2f5; --white: #ffffff;
         }
-        body { background: var(--light); color: var(--text); font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; }
+        body { background: var(--bg); color: #1a1a1a; font-family: 'Segoe UI', sans-serif; margin: 0; }
         
-        /* Navigation */
-        nav { background: var(--primary); color: white; padding: 1rem; position: sticky; top: 0; z-index: 1000; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
-        .nav-links div { cursor: pointer; padding: 6px 10px; border-radius: 5px; font-size: 0.8rem; background: rgba(255,255,255,0.1); transition: 0.3s; }
-        .nav-links div:hover { background: var(--secondary); }
+        /* Header & Navigation */
+        header { background: var(--primary); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        nav { background: var(--white); padding: 10px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid #ddd; }
+        .nav-btn { padding: 8px 16px; border: none; background: var(--bg); border-radius: 20px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .nav-btn.active { background: var(--primary); color: white; }
 
-        .container { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+        .container { max-width: 900px; margin: 20px auto; padding: 0 15px; }
 
-        /* Sections */
-        .page { display: none; animation: fadeIn 0.4s ease; }
-        .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Library Cards */
+        .lib-card { background: var(--white); border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-right: 8px solid var(--secondary); display: none; animation: slideUp 0.4s ease; }
+        .active-card { display: block; }
 
-        /* Login */
-        .login-card { background: white; padding: 40px; border-radius: 20px; max-width: 400px; margin: 80px auto; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; border-top: 8px solid var(--primary); }
-        input, textarea, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn-main { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Lesson Content */
-        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-right: 6px solid var(--secondary); }
-        .card h2 { color: var(--primary); margin-top: 0; font-size: 1.2rem; }
-        .section-tag { background: #e0f2fe; color: #0369a1; padding: 3px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: bold; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .theory-box { background: #eef4fb; padding: 15px; border-radius: 10px; border: 1px solid #d0e1f3; }
+        .practical-box { background: #fff5f5; padding: 15px; border-radius: 10px; border: 1px solid #fed7d7; }
         
-        .method-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .theory { background: #f1f5f9; padding: 12px; border-radius: 8px; font-size: 0.9rem; }
-        .practical { background: #fff1f2; padding: 12px; border-radius: 8px; font-size: 0.9rem; border-right: 3px solid var(--blood); }
+        h2 { color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--bg); padding-bottom: 10px; }
+        h4 { margin-bottom: 5px; color: var(--accent); }
 
-        .blood-draw-img { width: 100%; height: 300px; background: #eee url('https://images.unsplash.com/photo-1579152438802-046176b5ca23?q=80&w=1000') center/cover; border-radius: 12px; margin: 15px 0; }
+        /* Search & Ask Section */
+        .ask-section { background: var(--white); padding: 20px; border-radius: 15px; margin-top: 30px; }
+        textarea { width: 100%; border: 1px solid #ddd; border-radius: 10px; padding: 10px; resize: none; }
+        .send-btn { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 100%; }
 
-        footer { text-align: center; padding: 40px; background: #eee; color: #666; margin-top: 50px; }
+        footer { text-align: center; padding: 30px; color: #666; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-<div id="login-page" class="page active">
-    <div class="login-card">
-        <h1>LabAcademy Pro</h1>
-        <p>المنصة التعليمية الشاملة لتقنيي المختبرات</p>
-        <input type="text" id="user" placeholder="اسم الطالب">
-        <input type="password" placeholder="كلمة المرور">
-        <button class="btn-main" onclick="login()">دخول للموسوعة</button>
+<header>
+    <h1>مكتبة التحليلات المرضية 🔬</h1>
+    <p>دليلك العملي والنظري في المختبر الطبي</p>
+</header>
+
+<nav id="mainNav">
+    <button class="nav-btn active" onclick="showCategory('draw', this)">سحب الدم</button>
+    <button class="nav-btn" onclick="showCategory('bio', this)">الكيمياء</button>
+    <button class="nav-btn" onclick="showCategory('hem', this)">علم الدم</button>
+    <button class="nav-btn" onclick="showCategory('ser', this)">المصلية</button>
+    <button class="nav-btn" onclick="showCategory('ask', this)">استفسارات</button>
+</nav>
+
+<div class="container">
+    
+    <div id="draw" class="lib-card active-card">
+        <h2>💉 تقنيات سحب الدم الوريدي</h2>
+        <div class="theory-box">
+            <h4>الجانب النظري:</h4>
+            <p>يعتمد السحب الناجح على تحديد وريد المرفق الأصلي (Median Cubital) لبعده عن الأعصاب وسهولة تثبيته. يجب مراعاة نوع مانع التخثر حسب الفحص المطلوب.</p>
+        </div>
+        <div class="practical-box">
+            <h4>الجانب العملي:</h4>
+            <ul>
+                <li>تحضير السرنجة (أو Vacuteiner) والقطن المعقم.</li>
+                <li>ربط التورنيكة لم مدة لا تزيد عن دقيقة.</li>
+                <li>زاوية السحب 15-30 درجة بفتحة الإبرة للأعلى.</li>
+                <li>تفريغ الدم بهدوء على جدار الأنبوب لتجنب انحلال الدم (Hemolysis).</li>
+            </ul>
+        </div>
     </div>
-</div>
 
-<div id="app" class="page">
-    <nav>
-        <div style="font-weight: bold;">موسوعة التحليلات</div>
-        <div class="nav-links">
-            <div onclick="showP('draw')">سحب الدم</div>
-            <div onclick="showP('bio')">الكيمياء</div>
-            <div onclick="showP('hem')">علم الدم</div>
-            <div onclick="showP('hormone')">الهرمونات</div>
-            <div onclick="showP('micro')">الأحياء</div>
-            <div onclick="showP('ask')">استفسار</div>
-        </div>
-    </nav>
-
-    <div class="container">
-        
-        <div id="draw" class="page">
-            <div class="card">
-                <span class="section-tag">Phlebotomy</span>
-                <h2>دليل سحب الدم الوريدي الاحترافي</h2>
-                <div class="blood-draw-img"></div>
-                <div class="method-group">
-                    <div class="theory"><strong>نظرياً:</strong> يعتمد نجاح السحب على معرفة تشريح الأوردة (Cephalic, Basilic, Median Cubital).</div>
-                    <div class="practical"><strong>عملياً:</strong> زاوية الإدخال 15-30 درجة. تأكد من سحب الـ Tourniquet قبل إخراج الإبرة لتجنب الـ Hematoma.</div>
-                </div>
+    <div id="bio" class="lib-card">
+        <h2>🧪 الكيمياء الحياتية (Biochemistry)</h2>
+        <div class="card-item">
+            <h3>1. تحليل السكر (Glucose)</h3>
+            <div class="info-grid">
+                <div class="theory-box"><strong>النظري:</strong> قياس مستوى الطاقة في الجسم. مستوياته: Fasting (70-110 mg/dL).</div>
+                <div class="practical-box"><strong>العملي:</strong> عينة سيرم (أنبوب أصفر/أحمر) أو بلازما (أنبوب رمادي Fluoride). طريقة العمل: Enzymatic Colorimetric.</div>
             </div>
         </div>
-
-        <div id="bio" class="page">
-            <div class="card">
-                <h2>1. وظائف الكلى (RFT)</h2>
-                <p>تشمل Urea, Creatinine, Uric Acid.</p>
-                <div class="method-group">
-                    <div class="theory">نظرياً: قياس كفاءة الترشيح في الكلى.</div>
-                    <div class="practical">عملياً: عينة سيرم، فحص ملون (Colorimetric).</div>
-                </div>
-            </div>
-            <div class="card">
-                <h2>2. وظائف الكبد (LFT)</h2>
-                <p>تشمل GPT, GOT, ALP, Bilirubin (TSB).</p>
-            </div>
-            <div class="card">
-                <h2>3. الدهون (Lipid Profile)</h2>
-                <p>Cholesterol, Triglycerides, HDL, LDL.</p>
-            </div>
+        <hr>
+        <div class="card-item">
+            <h3>2. اليوريا والكرياتينين (RFT)</h3>
+            <p>تستخدم لتقييم وظائف الكلى. الارتفاع الحاد يشير لخلل في الفلترة الكبيبية.</p>
         </div>
-
-        <div id="hem" class="page">
-            <div class="card">
-                <h2>1. صورة الدم الكاملة (CBC)</h2>
-                <div class="method-group">
-                    <div class="theory">نظرياً: عد كريات الدم WBC, RBC, PLT.</div>
-                    <div class="practical">عملياً: أنبوب EDTA، استخدام جهاز الـ 3-Diff أو 5-Diff.</div>
-                </div>
-            </div>
-            <div class="card">
-                <h2>2. فصائل الدم (Blood Group)</h2>
-                <p>طريقة الـ Slide أو الـ Tube لاكتشاف مستضدات A, B, Rh.</p>
-            </div>
-        </div>
-
-        <div id="hormone" class="page">
-            <div class="card">
-                <h2>1. الغدة الدرقية (Thyroid Profile)</h2>
-                <p>TSH, T3, T4. تستخدم تقنية الـ ELIZA أو CLIA.</p>
-            </div>
-            <div class="card">
-                <h2>2. الهرمونات الجنسية</h2>
-                <p>LH, FSH, Prolactin, Testosterone.</p>
-            </div>
-        </div>
-
-        <div id="ask" class="page">
-            <div class="card">
-                <h2>أرسل استفسارك العلمي</h2>
-                <input type="text" placeholder="الموضوع">
-                <textarea rows="5" placeholder="اشرح مشكلتك المختبرية هنا..."></textarea>
-                <button class="btn-main">إرسال للخبراء</button>
-            </div>
-        </div>
-
     </div>
+
+    <div id="hem" class="lib-card">
+        <h2>🩸 علم الدم (Hematology)</h2>
+        <div class="card-item">
+            <h3>تحليل CBC الشامل</h3>
+            <div class="theory-box"><strong>النظري:</strong> عد الكريات البيضاء (WBC) للدلالة على الالتهاب، والحمراء (RBC) لفقر الدم.</div>
+            <div class="practical-box"><strong>العملي:</strong> أنبوب EDTA (بنفسجي). يجب المزج فوراً (8 مرات قلب هادئ). القراءة عبر جهاز الـ Analyzer.</div>
+        </div>
+    </div>
+
+    <div id="ser" class="lib-card">
+        <h2>🔬 الفحوصات المصلية (Serology)</h2>
+        <div class="card-item">
+            <h3>فحص الـ Widal & Rose Bengal</h3>
+            <div class="theory-box"><strong>النظري:</strong> البحث عن الأجسام المضادة (Antibodies) الناتجة عن بكتيريا السالمونيلا أو البروسيلات.</div>
+            <div class="practical-box"><strong>العملي:</strong> طريقة السلايد (Slide Agglutination). مزج الأنتيجين مع السيرم لمدة دقيقتين وملاحظة التلازن.</div>
+        </div>
+    </div>
+
+    <div id="ask" class="lib-card">
+        <h2>✉️ ركن الاستفسارات</h2>
+        <p>لديك حالة مختبرية غريبة؟ أرسل تفاصيلها هنا:</p>
+        <textarea rows="4" placeholder="اكتب سؤالك هنا..."></textarea>
+        <button class="send-btn" onclick="alert('تم إرسال استفسارك للمكتبة العلمية')">إرسال السؤال</button>
+    </div>
+
 </div>
 
 <footer>
-    <p>تم تطويره بواسطة: تقني مختبر | 2026</p>
+    <p>مكتبة التحليلات المرضية الشاملة - جميع الحقوق محفوظة لعام 2026</p>
+    <p>تم التصميم لخدمة طلاب التقنيات الطبية</p>
 </footer>
 
 <script>
-    function login() {
-        if(document.getElementById('user').value) {
-            document.getElementById('login-page').style.display = 'none';
-            document.getElementById('app').style.display = 'block';
-            showP('draw');
-        }
-    }
-
-    function showP(id) {
-        const pages = ['draw', 'bio', 'hem', 'hormone', 'micro', 'ask'];
-        pages.forEach(p => {
-            const el = document.getElementById(p);
-            if(el) el.style.display = 'none';
+    function showCategory(id, btn) {
+        // إخفاء كل الكروت
+        document.querySelectorAll('.lib-card').forEach(card => {
+            card.classList.remove('active-card');
         });
-        document.getElementById(id).style.display = 'block';
+        // إظهار الكارت المطلوب
+        document.getElementById(id).classList.add('active-card');
+        
+        // تحديث أزرار القائمة
+        document.querySelectorAll('.nav-btn').forEach(b => {
+            b.classList.remove('active');
+        });
+        btn.classList.add('active');
     }
 </script>
 
