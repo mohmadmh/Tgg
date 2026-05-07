@@ -3,163 +3,223 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام إدارة المختبر والتدريب الشامل</title>
+    <title>المختبر الذكي | نظام التحليل المتكامل</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #f3f4f6; }
-        .sidebar-item:hover, .sidebar-item.active { background-color: #1e293b; border-right: 4px solid #3b82f6; }
-        .card-shadow { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        @media print {
+            .no-print { display: none; }
+            .print-only { display: block; }
+            body { background: white; padding: 0; }
+            .report-card { shadow: none; border: 1px solid #eee; }
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body class="bg-gray-100 min-h-screen">
 
-    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-xl">
-        <div class="p-6 text-2xl font-bold border-b border-slate-700 flex items-center gap-2">
-            <i class="fas fa-microscope text-blue-400"></i>
-            <span>مختبر الذكاء</span>
+    <!-- القائمة العلوية -->
+    <nav class="bg-blue-800 text-white p-4 shadow-md no-print">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">نظام التحليلات المرضية المستقل</h1>
+            <span class="text-sm bg-blue-700 px-3 py-1 rounded">V 1.0 - جاهز للعمل</span>
         </div>
-        <nav class="flex-1 p-4 space-y-2">
-            <div onclick="showSection('dashboard')" class="sidebar-item active p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
-                <i class="fas fa-chart-line"></i> <span>لوحة الإحصائيات</span>
-            </div>
-            <div onclick="showSection('patients')" class="sidebar-item p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
-                <i class="fas fa-user-injured"></i> <span>إدارة المرضى</span>
-            </div>
-            <div onclick="showSection('analysis')" class="sidebar-item p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
-                <i class="fas fa-flask"></i> <span>المكتبة والتحاليل</span>
-            </div>
-            <div onclick="showSection('students')" class="sidebar-item p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
-                <i class="fas fa-user-graduate"></i> <span>شؤون الطلاب</span>
-            </div>
-            <div onclick="showSection('settings')" class="sidebar-item p-3 rounded-lg cursor-pointer flex items-center gap-3 transition">
-                <i class="fas fa-cog"></i> <span>الإعدادات</span>
-            </div>
-        </nav>
-        <div class="p-4 border-t border-slate-700 text-sm text-slate-400">
-            الإصدار 2.0.1 (Prisma Ready)
-        </div>
-    </aside>
+    </nav>
 
-    <main class="flex-1 flex flex-col overflow-y-auto">
-        <header class="bg-white p-4 shadow-sm flex justify-between items-center px-8">
-            <h2 id="section-title" class="text-xl font-bold text-slate-800">لوحة الإحصائيات</h2>
-            <div class="flex items-center gap-4">
-                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-bold">متصل بـ SQL</span>
-                <i class="fas fa-bell text-slate-400"></i>
-                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">AD</div>
-            </div>
-        </header>
-
-        <div class="p-8">
+    <main class="container mx-auto p-4 md:p-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <section id="dashboard-sec" class="content-section grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-xl card-shadow border-b-4 border-blue-500">
-                    <p class="text-slate-500 text-sm">إجمالي المرضى</p>
-                    <h3 class="text-3xl font-bold">1,240</h3>
-                </div>
-                <div class="bg-white p-6 rounded-xl card-shadow border-b-4 border-red-500">
-                    <p class="text-slate-500 text-sm">تحاليل قيد الانتظار</p>
-                    <h3 class="text-3xl font-bold">14</h3>
-                </div>
-                <div class="bg-white p-6 rounded-xl card-shadow border-b-4 border-green-500">
-                    <p class="text-slate-500 text-sm">الطلاب المتدربين</p>
-                    <h3 class="text-3xl font-bold">85</h3>
-                </div>
-                <div class="bg-white p-6 rounded-xl card-shadow border-b-4 border-purple-500">
-                    <p class="text-slate-500 text-sm">إيرادات اليوم</p>
-                    <h3 class="text-3xl font-bold">450k IQD</h3>
-                </div>
-            </section>
-
-            <section id="patients-sec" class="content-section hidden space-y-6">
-                <div class="bg-white p-6 rounded-xl shadow-md">
-                    <div class="flex justify-between mb-4">
-                        <h3 class="font-bold text-lg">سجل المرضى الأخير</h3>
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">+ إضافة مريض جديد</button>
+            <!-- القسم الأول: إدخال البيانات (المدخلات) -->
+            <div class="lg:col-span-1 space-y-6 no-print">
+                <div class="bg-white p-6 rounded-lg shadow-sm border-t-4 border-blue-500">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">1. بيانات المريض</h2>
+                    <div class="space-y-3">
+                        <input type="text" id="pName" placeholder="اسم المريض بالكامل" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="pAge" placeholder="العمر" class="border p-2 rounded">
+                            <select id="pGender" class="border p-2 rounded">
+                                <option value="ذكر">ذكر</option>
+                                <option value="أنثى">أنثى</option>
+                            </select>
+                        </div>
+                        <textarea id="pHistory" placeholder="ملاحظات سريرية أو تاريخ مرضي..." class="w-full border p-2 rounded h-20"></textarea>
                     </div>
-                    <table class="w-full text-right border-collapse">
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border-t-4 border-green-500">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">2. تسجيل التحاليل</h2>
+                    <div class="space-y-3">
+                        <select id="testType" class="w-full border p-2 rounded bg-gray-50">
+                            <optgroup label="السكر والتمثيل الغذائي">
+                                <option value="GLUCOSE">سكر الدم (عشوائي)</option>
+                                <option value="HBA1C">السكر التراكمي (HbA1c)</option>
+                            </optgroup>
+                            <optgroup label="وظائف الكلى">
+                                <option value="CREATININE">كرياتينين (Creatinine)</option>
+                                <option value="UREA">يوريا (Urea)</option>
+                            </optgroup>
+                            <optgroup label="الدم والالتهابات">
+                                <option value="HGB">الهيموجلوبين (Hb)</option>
+                                <option value="WBC">كريات الدم البيضاء (WBC)</option>
+                                <option value="CRP">البروتين التفاعلي (CRP)</option>
+                            </optgroup>
+                        </select>
+                        <input type="number" id="testValue" placeholder="أدخل النتيجة هنا..." class="w-full border p-2 rounded text-lg font-bold text-blue-700">
+                        <button onclick="processMedicalAnalysis()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition">إضافة وتحليل الآن</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- القسم الثاني: عرض النتائج والتقرير (المخرجات) -->
+            <div class="lg:col-span-2 space-y-6">
+                <div id="printArea" class="bg-white p-8 rounded-lg shadow-md min-h-[600px] relative report-card">
+                    <!-- ترويسة التقرير -->
+                    <div class="flex justify-between items-start border-b-2 border-gray-800 pb-4 mb-6">
+                        <div>
+                            <h2 class="text-2xl font-black text-gray-900">تقرير نتائج مختبرية</h2>
+                            <p class="text-gray-500 text-sm">Laboratry Analysis Report</p>
+                        </div>
+                        <div class="text-left">
+                            <p id="reportDate" class="font-mono text-sm"></p>
+                            <p class="text-xs text-gray-400">ID: #<span id="reportID"></span></p>
+                        </div>
+                    </div>
+
+                    <!-- معلومات المريض في التقرير -->
+                    <div class="grid grid-cols-3 gap-4 mb-8 text-sm bg-gray-50 p-4 rounded">
+                        <p><strong>المريض:</strong> <span id="display_pName">---</span></p>
+                        <p><strong>العمر:</strong> <span id="display_pAge">---</span></p>
+                        <p><strong>الجنس:</strong> <span id="display_pGender">---</span></p>
+                    </div>
+
+                    <!-- جدول النتائج -->
+                    <table class="w-full text-right border-collapse mb-8">
                         <thead>
-                            <tr class="bg-slate-50 text-slate-600">
-                                <th class="p-3 border-b">الاسم الكامل</th>
-                                <th class="p-3 border-b">رقم الهاتف</th>
-                                <th class="p-3 border-b">آخر تحليل</th>
-                                <th class="p-3 border-b">الحالة</th>
+                            <tr class="border-b-2 border-gray-300 bg-gray-100">
+                                <th class="p-3 text-sm">اسم التحليل</th>
+                                <th class="p-3 text-sm">النتيجة</th>
+                                <th class="p-3 text-sm">المدى الطبيعي</th>
+                                <th class="p-3 text-sm">الحالة</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td class="p-3 border-b">أحمد علي محمد</td>
-                                <td class="p-3 border-b">0770XXXXXXX</td>
-                                <td class="p-3 border-b text-blue-600 font-bold">Lipid Profile</td>
-                                <td class="p-3 border-b text-green-600">مكتمل</td>
-                            </tr>
+                        <tbody id="resultsTableBody">
+                            <!-- النتائج تضاف برمجياً هنا -->
                         </tbody>
                     </table>
-                </div>
-            </section>
 
-            <section id="analysis-sec" class="content-section hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-xl shadow-md border-r-8 border-blue-900">
-                    <h3 class="font-bold text-xl text-blue-900 mb-2">CBC - صورة الدم الكاملة</h3>
-                    <p class="text-sm text-slate-600 mb-4 font-bold text-red-600 underline">الجانب النظري:</p>
-                    <p class="text-sm leading-relaxed mb-4">فحص شامل لتقييم جميع أنواع خلايا الدم. يستخدم لتشخيص فقر الدم، الالتهابات الناتجة عن البكتيريا أو الفيروسات، واضطرابات التخثر.</p>
-                    <p class="text-sm text-slate-600 mb-4 font-bold text-green-700 underline">الجانب العملي:</p>
-                    <ul class="text-sm list-disc list-inside space-y-1 mb-4">
-                        <li>استخدام أنبوب EDTA (الأرجواني).</li>
-                        <li>المزج الفوري والهادئ للعينة.</li>
-                        <li>معايرة الجهاز بمحلول السيطرة (Control) قبل البدء.</li>
-                    </ul>
-                    <div class="bg-blue-50 p-3 rounded-lg text-sm font-bold text-blue-800">
-                        المدى الطبيعي (Hb): 13.5 - 17.5 g/dL (للذكور)
+                    <!-- التفسير الطبي المدمج -->
+                    <div id="medicalInterpretations" class="mt-10 space-y-4">
+                        <h3 class="text-md font-bold text-blue-900 border-r-4 border-blue-900 pr-2">التفسير الطبي والمعلومات العلمية:</h3>
+                        <div id="interpretationList" class="text-sm text-gray-700 space-y-2">
+                            <!-- التفسيرات تظهر هنا -->
+                        </div>
                     </div>
-                </div>
-                </section>
 
-            <section id="students-sec" class="content-section hidden">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-xl shadow-md text-center">
-                        <i class="fas fa-calendar-check text-4xl text-green-500 mb-4"></i>
-                        <h4 class="font-bold">الحضور والغياب</h4>
-                        <button class="mt-4 bg-slate-100 px-4 py-2 rounded text-sm hover:bg-slate-200">عرض السجل</button>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-md text-center">
-                        <i class="fas fa-star text-4xl text-yellow-500 mb-4"></i>
-                        <h4 class="font-bold">تقييم الأداء العملي</h4>
-                        <button class="mt-4 bg-slate-100 px-4 py-2 rounded text-sm hover:bg-slate-200">إضافة تقييم</button>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-md text-center">
-                        <i class="fas fa-file-pdf text-4xl text-red-500 mb-4"></i>
-                        <h4 class="font-bold">شهادات التدريب</h4>
-                        <button class="mt-4 bg-slate-100 px-4 py-2 rounded text-sm hover:bg-slate-200">إصدار شهادة</button>
+                    <div class="absolute bottom-8 left-8 text-xs text-gray-300 no-print">
+                        نظام مستقل - لا يتطلب خادم خارجي
                     </div>
                 </div>
-            </section>
+
+                <div class="flex gap-4 no-print">
+                    <button onclick="window.print()" class="flex-1 bg-gray-800 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2">
+                        <span>طباعة التقرير (PDF)</span>
+                    </button>
+                    <button onclick="location.reload()" class="bg-red-50 text-red-600 px-6 py-3 rounded-lg border border-red-200 hover:bg-red-100">مسح البيانات</button>
+                </div>
+            </div>
 
         </div>
     </main>
 
     <script>
-        function showSection(sectionId) {
-            // إخفاء كل الأقسام
-            document.querySelectorAll('.content-section').forEach(sec => sec.classList.add('hidden'));
-            // إظهار القسم المطلوب
-            document.getElementById(sectionId + '-sec').classList.remove('hidden');
-            
-            // تحديث العنوان
-            const titles = {
-                'dashboard': 'لوحة الإحصائيات',
-                'patients': 'إدارة المرضى والسجلات',
-                'analysis': 'مكتبة التحاليل الطبية الشاملة',
-                'students': 'إدارة الطلاب والمتدربين',
-                'settings': 'الإعدادات المتقدمة'
-            };
-            document.getElementById('section-title').innerText = titles[sectionId];
+        // 1. قاعدة البيانات الطبية (الموسوعة)
+        const medicalDB = {
+            "GLUCOSE": {
+                name: "Fasting Blood Sugar",
+                unit: "mg/dL",
+                normal: "70 - 100",
+                calc: (v) => {
+                    if(v < 70) return { status: "منخفض", danger: true, info: "هبوط سكر الدم: قد يسبب دوار وفقدان وعي. يجب تناول سكريات سريعة." };
+                    if(v <= 100) return { status: "طبيعي", danger: false, info: "المستوى طبيعي ومستقر." };
+                    if(v <= 125) return { status: "ما قبل السكري", danger: false, info: "مرحلة Prediabetes: يجب تقليل الكربوهيدرات وممارسة الرياضة." };
+                    return { status: "مرتفع", danger: true, info: "مؤشر إصابة بالسكري: يتطلب استشارة طبية فورية وتنظيم غذائي صارم." };
+                }
+            },
+            "CREATININE": {
+                name: "Serum Creatinine",
+                unit: "mg/dL",
+                normal: "0.6 - 1.3",
+                calc: (v) => {
+                    if(v > 1.3) return { status: "مرتفع", danger: true, info: "قصور كلوي محتمل: الكلى لا تصفح الفضلات بشكل جيد. تجنب الأدوية المسكنة بكثرة." };
+                    if(v < 0.6) return { status: "منخفض", danger: false, info: "غالباً ما يرتبط بضعف الكتلة العضلية أو سوء التغذية." };
+                    return { status: "طبيعي", danger: false, info: "وظائف الكلى سليمة." };
+                }
+            },
+            "HBA1C": {
+                name: "HbA1c (Trakumi)",
+                unit: "%",
+                normal: "4.0 - 5.6",
+                calc: (v) => {
+                    if(v <= 5.6) return { status: "طبيعي", danger: false, info: "معدل السكر التراكمي ممتاز لآخر 3 أشهر." };
+                    if(v <= 6.4) return { status: "مرحلة خطرة", danger: false, info: "بداية بوادر السكري. راقب وزنك ونظامك الغذائي." };
+                    return { status: "سكري غير منضبط", danger: true, info: "السكري مرتفع جداً: خطر على الأوعية الدموية والأعصاب." };
+                }
+            },
+            "CRP": {
+                name: "C-Reactive Protein",
+                unit: "mg/L",
+                normal: "< 10",
+                calc: (v) => {
+                    if(v > 10) return { status: "التهاب مرتفع", danger: true, info: "وجود التهاب حاد في الجسم (عدوى، إصابة، أو مرض مناعي)." };
+                    return { status: "طبيعي", danger: false, info: "لا يوجد مؤشر التهاب حاد." };
+                }
+            }
+        };
 
-            // تحديث نشاط القائمة الجانبية
-            document.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+        // ضبط التاريخ والمعرف عند الفتح
+        document.getElementById('reportDate').innerText = new Date().toLocaleDateString('ar-EG');
+        document.getElementById('reportID').innerText = Math.floor(1000 + Math.random() * 9000);
+
+        function processMedicalAnalysis() {
+            // جلب البيانات
+            const name = document.getElementById('pName').value || "مريض افتراضي";
+            const age = document.getElementById('pAge').value;
+            const gender = document.getElementById('pGender').value;
+            const testKey = document.getElementById('testType').value;
+            const val = parseFloat(document.getElementById('testValue').value);
+
+            if(isNaN(val)) { alert("أدخل قيمة عددية صحيحة نرجوك"); return; }
+
+            // تحديث بيانات التقرير العلوي
+            document.getElementById('display_pName').innerText = name;
+            document.getElementById('display_pAge').innerText = age;
+            document.getElementById('display_pGender').innerText = gender;
+
+            // إجراء التحليل
+            const testData = medicalDB[testKey];
+            const result = testData.calc(val);
+
+            // إضافة سطر للجدول
+            const newRow = `
+                <tr class="border-b ${result.danger ? 'text-red-600 bg-red-50' : 'text-gray-800'}">
+                    <td class="p-3 font-medium">${testData.name}</td>
+                    <td class="p-3 font-bold">${val} ${testData.unit}</td>
+                    <td class="p-3 text-gray-500">${testData.normal}</td>
+                    <td class="p-3 font-bold">${result.status}</td>
+                </tr>
+            `;
+            document.getElementById('resultsTableBody').innerHTML += newRow;
+
+            // إضافة التفسير العلمي أسفل التقرير
+            const infoBlock = `
+                <div class="p-3 bg-blue-50 rounded-lg border-r-2 border-blue-300">
+                    <strong>${testData.name}:</strong> ${result.info}
+                </div>
+            `;
+            document.getElementById('interpretationList').innerHTML += infoBlock;
+
+            // مسح حقل النتيجة لإدخال فحص آخر
+            document.getElementById('testValue').value = "";
         }
     </script>
 </body>
