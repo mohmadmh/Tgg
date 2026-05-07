@@ -3,222 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المختبر الذكي | نظام التحليل المتكامل</title>
+    <title>نظام المختبر الشامل | Comprehensive Lab System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+        body { font-family: 'Cairo', sans-serif; }
         @media print {
             .no-print { display: none; }
-            .print-only { display: block; }
             body { background: white; padding: 0; }
-            .report-card { shadow: none; border: 1px solid #eee; }
+            .report-box { shadow: none; border: none; width: 100%; }
         }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
 
-    <!-- القائمة العلوية -->
-    <nav class="bg-blue-800 text-white p-4 shadow-md no-print">
+    <nav class="bg-slate-900 text-white p-4 no-print shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">نظام التحليلات المرضية المستقل</h1>
-            <span class="text-sm bg-blue-700 px-3 py-1 rounded">V 1.0 - جاهز للعمل</span>
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <span class="bg-blue-600 p-1 rounded">🔬</span> نظام التحليلات المتكامل
+            </h1>
+            <div class="text-xs text-slate-400">نظام مستقل للتحليل والمعلومات الطبية</div>
         </div>
     </nav>
 
-    <main class="container mx-auto p-4 md:p-8">
+    <main class="container mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <!-- القسم الأول: إدخال البيانات (المدخلات) -->
-            <div class="lg:col-span-1 space-y-6 no-print">
-                <div class="bg-white p-6 rounded-lg shadow-sm border-t-4 border-blue-500">
-                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">1. بيانات المريض</h2>
-                    <div class="space-y-3">
-                        <input type="text" id="pName" placeholder="اسم المريض بالكامل" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-400 outline-none">
-                        <div class="grid grid-cols-2 gap-2">
-                            <input type="number" id="pAge" placeholder="العمر" class="border p-2 rounded">
-                            <select id="pGender" class="border p-2 rounded">
-                                <option value="ذكر">ذكر</option>
-                                <option value="أنثى">أنثى</option>
-                            </select>
-                        </div>
-                        <textarea id="pHistory" placeholder="ملاحظات سريرية أو تاريخ مرضي..." class="w-full border p-2 rounded h-20"></textarea>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-lg shadow-sm border-t-4 border-green-500">
-                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">2. تسجيل التحاليل</h2>
-                    <div class="space-y-3">
-                        <select id="testType" class="w-full border p-2 rounded bg-gray-50">
-                            <optgroup label="السكر والتمثيل الغذائي">
-                                <option value="GLUCOSE">سكر الدم (عشوائي)</option>
-                                <option value="HBA1C">السكر التراكمي (HbA1c)</option>
-                            </optgroup>
-                            <optgroup label="وظائف الكلى">
-                                <option value="CREATININE">كرياتينين (Creatinine)</option>
-                                <option value="UREA">يوريا (Urea)</option>
-                            </optgroup>
-                            <optgroup label="الدم والالتهابات">
-                                <option value="HGB">الهيموجلوبين (Hb)</option>
-                                <option value="WBC">كريات الدم البيضاء (WBC)</option>
-                                <option value="CRP">البروتين التفاعلي (CRP)</option>
-                            </optgroup>
+        <!-- لوحة التحكم والإدخال -->
+        <div class="lg:col-span-4 space-y-6 no-print">
+            <div class="bg-white p-5 rounded-xl shadow-sm border-b-4 border-blue-600">
+                <h3 class="font-bold mb-4 text-slate-800">بيانات المريض</h3>
+                <div class="space-y-3">
+                    <input type="text" id="pName" placeholder="اسم المريض" class="w-full border p-2 rounded-lg outline-blue-500">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="pAge" placeholder="العمر" class="border p-2 rounded-lg outline-blue-500">
+                        <select id="pGender" class="border p-2 rounded-lg">
+                            <option value="ذكر">ذكر</option>
+                            <option value="أنثى">أنثى</option>
                         </select>
-                        <input type="number" id="testValue" placeholder="أدخل النتيجة هنا..." class="w-full border p-2 rounded text-lg font-bold text-blue-700">
-                        <button onclick="processMedicalAnalysis()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition">إضافة وتحليل الآن</button>
                     </div>
                 </div>
             </div>
 
-            <!-- القسم الثاني: عرض النتائج والتقرير (المخرجات) -->
-            <div class="lg:col-span-2 space-y-6">
-                <div id="printArea" class="bg-white p-8 rounded-lg shadow-md min-h-[600px] relative report-card">
-                    <!-- ترويسة التقرير -->
-                    <div class="flex justify-between items-start border-b-2 border-gray-800 pb-4 mb-6">
-                        <div>
-                            <h2 class="text-2xl font-black text-gray-900">تقرير نتائج مختبرية</h2>
-                            <p class="text-gray-500 text-sm">Laboratry Analysis Report</p>
-                        </div>
-                        <div class="text-left">
-                            <p id="reportDate" class="font-mono text-sm"></p>
-                            <p class="text-xs text-gray-400">ID: #<span id="reportID"></span></p>
-                        </div>
+            <div class="bg-white p-5 rounded-xl shadow-sm border-b-4 border-emerald-600">
+                <h3 class="font-bold mb-4 text-slate-800">إضافة فحص جديد</h3>
+                <div class="space-y-4">
+                    <select id="testType" class="w-full border p-2 rounded-lg bg-slate-50 text-sm">
+                        <optgroup label="🩸 صورة الدم (CBC)">
+                            <option value="HGB">Hemoglobin (Hb)</option>
+                            <option value="WBC">White Blood Cells (WBC)</option>
+                            <option value="PLT">Platelets (الصفائح)</option>
+                        </optgroup>
+                        <optgroup label="🍬 السكري (Diabetes)">
+                            <option value="GLUCOSE">Fast Blood Sugar</option>
+                            <option value="HBA1C">HbA1c (التراكمي)</option>
+                        </optgroup>
+                        <optgroup label="🧪 وظائف الكلى (Renal)">
+                            <option value="CREATININE">Creatinine</option>
+                            <option value="UREA">Urea</option>
+                            <option value="URIC">Uric Acid (النقرس)</option>
+                        </optgroup>
+                        <optgroup label="🧬 وظائف الكبد (Liver)">
+                            <option value="ALT">ALT (GPT)</option>
+                            <option value="AST">AST (GOT)</option>
+                            <option value="BILIRUBIN">Bilirubin Total</option>
+                        </optgroup>
+                        <optgroup label="❤️ الدهون (Lipids)">
+                            <option value="CHOL">Cholesterol Total</option>
+                            <option value="TRIG">Triglycerides (الدهون الثلاثية)</option>
+                            <option value="HDL">HDL (الكوليسترول النافع)</option>
+                        </optgroup>
+                        <optgroup label="⚡ المعادن والفيتامينات">
+                            <option value="VITD">Vitamin D</option>
+                            <option value="B12">Vitamin B12</option>
+                            <option value="CALCIUM">Calcium (الكالسيوم)</option>
+                            <option value="IRON">Iron (الحديد)</option>
+                        </optgroup>
+                        <optgroup label="🦋 الهرمونات (Hormones)">
+                            <option value="TSH">TSH (الغدة الدرقية)</option>
+                            <option value="TESTOS">Testosterone</option>
+                        </optgroup>
+                    </select>
+                    <input type="number" id="testValue" step="0.01" placeholder="النتيجة الرقمية" class="w-full border-2 border-emerald-100 p-3 rounded-lg text-xl font-bold text-emerald-700 outline-emerald-500">
+                    <button onclick="runAnalysis()" class="w-full bg-emerald-600 text-white py-3 rounded-lg font-bold shadow-md hover:bg-emerald-700 transition">تحليل النتيجة الآن</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- منطقة التقرير -->
+        <div class="lg:col-span-8">
+            <div id="printableReport" class="bg-white p-8 rounded-lg shadow-sm min-h-[800px] border border-gray-100 report-box">
+                <div class="flex justify-between items-center border-b-4 border-slate-900 pb-4 mb-6">
+                    <div>
+                        <h2 class="text-3xl font-black text-slate-900 italic">MEDICAL REPORT</h2>
+                        <p class="text-slate-500 font-bold">قسم التحليلات المرضية والمعلومات العلمية</p>
                     </div>
-
-                    <!-- معلومات المريض في التقرير -->
-                    <div class="grid grid-cols-3 gap-4 mb-8 text-sm bg-gray-50 p-4 rounded">
-                        <p><strong>المريض:</strong> <span id="display_pName">---</span></p>
-                        <p><strong>العمر:</strong> <span id="display_pAge">---</span></p>
-                        <p><strong>الجنس:</strong> <span id="display_pGender">---</span></p>
-                    </div>
-
-                    <!-- جدول النتائج -->
-                    <table class="w-full text-right border-collapse mb-8">
-                        <thead>
-                            <tr class="border-b-2 border-gray-300 bg-gray-100">
-                                <th class="p-3 text-sm">اسم التحليل</th>
-                                <th class="p-3 text-sm">النتيجة</th>
-                                <th class="p-3 text-sm">المدى الطبيعي</th>
-                                <th class="p-3 text-sm">الحالة</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resultsTableBody">
-                            <!-- النتائج تضاف برمجياً هنا -->
-                        </tbody>
-                    </table>
-
-                    <!-- التفسير الطبي المدمج -->
-                    <div id="medicalInterpretations" class="mt-10 space-y-4">
-                        <h3 class="text-md font-bold text-blue-900 border-r-4 border-blue-900 pr-2">التفسير الطبي والمعلومات العلمية:</h3>
-                        <div id="interpretationList" class="text-sm text-gray-700 space-y-2">
-                            <!-- التفسيرات تظهر هنا -->
-                        </div>
-                    </div>
-
-                    <div class="absolute bottom-8 left-8 text-xs text-gray-300 no-print">
-                        نظام مستقل - لا يتطلب خادم خارجي
+                    <div class="text-left font-mono">
+                        <p>Date: <span id="rDate"></span></p>
+                        <p class="text-xs">System Auth: VERCEL-PRD-2026</p>
                     </div>
                 </div>
 
-                <div class="flex gap-4 no-print">
-                    <button onclick="window.print()" class="flex-1 bg-gray-800 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2">
-                        <span>طباعة التقرير (PDF)</span>
-                    </button>
-                    <button onclick="location.reload()" class="bg-red-50 text-red-600 px-6 py-3 rounded-lg border border-red-200 hover:bg-red-100">مسح البيانات</button>
+                <div class="grid grid-cols-3 gap-4 mb-8 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <p><strong>اسم المريض:</strong> <span id="rName">---</span></p>
+                    <p><strong>العمر:</strong> <span id="rAge">---</span></p>
+                    <p><strong>الجنس:</strong> <span id="rGender">---</span></p>
+                </div>
+
+                <table class="w-full mb-8">
+                    <thead>
+                        <tr class="bg-slate-900 text-white text-sm">
+                            <th class="p-3 text-right">الفحص (Test)</th>
+                            <th class="p-3 text-center">النتيجة</th>
+                            <th class="p-3 text-center">المدى الطبيعي</th>
+                            <th class="p-3 text-center">الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportTable"></tbody>
+                </table>
+
+                <div id="scientificSection" class="mt-12">
+                    <h4 class="text-lg font-bold text-blue-800 mb-4 flex items-center gap-2">
+                        <span>📘</span> التفسير العلمي والمعلومات الطبية للنتائج:
+                    </h4>
+                    <div id="infoArea" class="space-y-4"></div>
                 </div>
             </div>
 
+            <div class="mt-6 flex gap-3 no-print">
+                <button onclick="window.print()" class="flex-1 bg-slate-800 text-white py-4 rounded-xl font-bold shadow-lg hover:scale-[1.02] transition">طباعة التقرير كـ PDF</button>
+                <button onclick="location.reload()" class="bg-white text-red-600 px-8 py-4 rounded-xl border border-red-100 hover:bg-red-50 font-bold">تصفير</button>
+            </div>
         </div>
     </main>
 
     <script>
-        // 1. قاعدة البيانات الطبية (الموسوعة)
-        const medicalDB = {
-            "GLUCOSE": {
-                name: "Fasting Blood Sugar",
-                unit: "mg/dL",
-                normal: "70 - 100",
-                calc: (v) => {
-                    if(v < 70) return { status: "منخفض", danger: true, info: "هبوط سكر الدم: قد يسبب دوار وفقدان وعي. يجب تناول سكريات سريعة." };
-                    if(v <= 100) return { status: "طبيعي", danger: false, info: "المستوى طبيعي ومستقر." };
-                    if(v <= 125) return { status: "ما قبل السكري", danger: false, info: "مرحلة Prediabetes: يجب تقليل الكربوهيدرات وممارسة الرياضة." };
-                    return { status: "مرتفع", danger: true, info: "مؤشر إصابة بالسكري: يتطلب استشارة طبية فورية وتنظيم غذائي صارم." };
-                }
-            },
-            "CREATININE": {
-                name: "Serum Creatinine",
-                unit: "mg/dL",
-                normal: "0.6 - 1.3",
-                calc: (v) => {
-                    if(v > 1.3) return { status: "مرتفع", danger: true, info: "قصور كلوي محتمل: الكلى لا تصفح الفضلات بشكل جيد. تجنب الأدوية المسكنة بكثرة." };
-                    if(v < 0.6) return { status: "منخفض", danger: false, info: "غالباً ما يرتبط بضعف الكتلة العضلية أو سوء التغذية." };
-                    return { status: "طبيعي", danger: false, info: "وظائف الكلى سليمة." };
-                }
-            },
-            "HBA1C": {
-                name: "HbA1c (Trakumi)",
-                unit: "%",
-                normal: "4.0 - 5.6",
-                calc: (v) => {
-                    if(v <= 5.6) return { status: "طبيعي", danger: false, info: "معدل السكر التراكمي ممتاز لآخر 3 أشهر." };
-                    if(v <= 6.4) return { status: "مرحلة خطرة", danger: false, info: "بداية بوادر السكري. راقب وزنك ونظامك الغذائي." };
-                    return { status: "سكري غير منضبط", danger: true, info: "السكري مرتفع جداً: خطر على الأوعية الدموية والأعصاب." };
-                }
-            },
-            "CRP": {
-                name: "C-Reactive Protein",
-                unit: "mg/L",
-                normal: "< 10",
-                calc: (v) => {
-                    if(v > 10) return { status: "التهاب مرتفع", danger: true, info: "وجود التهاب حاد في الجسم (عدوى، إصابة، أو مرض مناعي)." };
-                    return { status: "طبيعي", danger: false, info: "لا يوجد مؤشر التهاب حاد." };
-                }
-            }
+        // قاعدة البيانات الطبية الشاملة
+        const MEDICAL_ENGINE = {
+            "HGB": { name: "Hemoglobin", unit: "g/dL", ref: "12.0 - 17.0",
+                calc: (v) => v < 12 ? {s: "منخفض", d:true, m: "فقر دم (Anemia): يحتاج لغذاء غني بالحديد أو مكملات."} : v > 17.5 ? {s: "مرتفع", d:true, m: "زيادة لزوجة الدم: قد ترتبط بالتدخين أو نقص الأوكسجين."} : {s: "طبيعي", d:false, m: "نسبة الهيموجلوبين ضمن المعدل الطبيعي."} },
+            "WBC": { name: "White Blood Cells", unit: "10^3/uL", ref: "4.0 - 11.0",
+                calc: (v) => v > 11 ? {s: "مرتفع", d:true, m: "وجود التهاب أو عدوى نشطة في الجسم."} : v < 4 ? {s: "منخفض", d:true, m: "ضعف في المناعة أو خلل في نخاع العظم."} : {s: "طبيعي", d:false, m: "المناعة مستقرة."} },
+            "GLUCOSE": { name: "Blood Glucose (F)", unit: "mg/dL", ref: "70 - 100",
+                calc: (v) => v > 126 ? {s: "سكري", d:true, m: "اشتباه إصابة بالسكري. يجب الصيام 8 ساعات وإعادة الفحص."} : v > 100 ? {s: "Pre-Diabetes", d:false, m: "مرحلة ما قبل السكري: تتطلب حمية فورية."} : {s: "طبيعي", d:false, m: "مستوى السكر ممتاز."} },
+            "HBA1C": { name: "HbA1c (التراكمي)", unit: "%", ref: "4.0 - 5.6",
+                calc: (v) => v > 6.5 ? {s: "مرتفع (سكري)", d:true, m: "السكر غير منضبط خلال الـ 3 أشهر الماضية."} : v > 5.7 ? {s: "خطورة", d:false, m: "مؤشر على اقتراب الإصابة بالسكري."} : {s: "طبيعي", d:false, m: "تحكم ممتاز بالسكري."} },
+            "CREATININE": { name: "Creatinine", unit: "mg/dL", ref: "0.6 - 1.3",
+                calc: (v) => v > 1.3 ? {s: "مرتفع", d:true, m: "إجهاد كلوي: يجب تقليل الأملاح وشرب كميات كافية من الماء."} : {s: "طبيعي", d:false, m: "الكلى تعمل بكفاءة."} },
+            "ALT": { name: "ALT (GPT)", unit: "U/L", ref: "< 41",
+                calc: (v) => v > 41 ? {s: "مرتفع", d:true, m: "تضرر في خلايا الكبد أو دهون كبدية."} : {s: "طبيعي", d:false, m: "إنزيمات الكبد طبيعية."} },
+            "CHOL": { name: "Cholesterol Total", unit: "mg/dL", ref: "< 200",
+                calc: (v) => v > 200 ? {s: "مرتفع", d:true, m: "خطر على الشرايين: يجب تقليل الدهون المشبعة."} : {s: "طبيعي", d:false, m: "نسبة كوليسترول جيدة."} },
+            "TSH": { name: "Thyroid (TSH)", unit: "uIU/mL", ref: "0.4 - 4.2",
+                calc: (v) => v > 4.2 ? {s: "مرتفع", d:true, m: "خمول الغدة الدرقية (Hypothyroidism)."} : v < 0.4 ? {s: "منخفض", d:true, m: "فرط نشاط الغدة (Hyperthyroidism)."} : {s: "طبيعي", d:false, m: "الغدة متوازنة."} },
+            "VITD": { name: "Vitamin D3", unit: "ng/mL", ref: "30 - 100",
+                calc: (v) => v < 20 ? {s: "نقص حاد", d:true, m: "تحتاج جرعات علاجية من فيتامين د للوقاية من هشاشة العظام."} : v < 30 ? {s: "غير كافٍ", d:false, m: "يفضل التعرض للشمس وتناول أغذية مدعمة."} : {s: "طبيعي", d:false, m: "مستوى فيتامين د ممتاز."} },
+            "URIC": { name: "Uric Acid", unit: "mg/dL", ref: "3.5 - 7.2",
+                calc: (v) => v > 7.2 ? {s: "مرتفع", d:true, m: "اشتباه نقرس (Gout): قلل من اللحوم الحمراء والبقوليات."} : {s: "طبيعي", d:false, m: "حمض اليوريك طبيعي."} }
         };
 
-        // ضبط التاريخ والمعرف عند الفتح
-        document.getElementById('reportDate').innerText = new Date().toLocaleDateString('ar-EG');
-        document.getElementById('reportID').innerText = Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('rDate').innerText = new Date().toLocaleDateString('ar-EG');
 
-        function processMedicalAnalysis() {
-            // جلب البيانات
-            const name = document.getElementById('pName').value || "مريض افتراضي";
+        function runAnalysis() {
+            const name = document.getElementById('pName').value || "غير مسجل";
             const age = document.getElementById('pAge').value;
             const gender = document.getElementById('pGender').value;
             const testKey = document.getElementById('testType').value;
             const val = parseFloat(document.getElementById('testValue').value);
 
-            if(isNaN(val)) { alert("أدخل قيمة عددية صحيحة نرجوك"); return; }
+            if (isNaN(val)) return alert("يرجى إدخال قيمة رقمية صحيحة");
 
-            // تحديث بيانات التقرير العلوي
-            document.getElementById('display_pName').innerText = name;
-            document.getElementById('display_pAge').innerText = age;
-            document.getElementById('display_pGender').innerText = gender;
+            // تحديث البيانات الشخصية
+            document.getElementById('rName').innerText = name;
+            document.getElementById('rAge').innerText = age;
+            document.getElementById('rGender').innerText = gender;
 
-            // إجراء التحليل
-            const testData = medicalDB[testKey];
-            const result = testData.calc(val);
+            const db = MEDICAL_ENGINE[testKey];
+            const result = db.calc(val);
 
-            // إضافة سطر للجدول
-            const newRow = `
-                <tr class="border-b ${result.danger ? 'text-red-600 bg-red-50' : 'text-gray-800'}">
-                    <td class="p-3 font-medium">${testData.name}</td>
-                    <td class="p-3 font-bold">${val} ${testData.unit}</td>
-                    <td class="p-3 text-gray-500">${testData.normal}</td>
-                    <td class="p-3 font-bold">${result.status}</td>
-                </tr>
-            `;
-            document.getElementById('resultsTableBody').innerHTML += newRow;
+            // إضافة للجدول
+            const row = `<tr class="border-b ${result.d ? 'bg-red-50 text-red-700 font-bold' : ''}">
+                <td class="p-3 text-right text-sm">${db.name}</td>
+                <td class="p-3 text-center">${val} ${db.unit}</td>
+                <td class="p-3 text-center text-gray-500 text-xs">${db.ref}</td>
+                <td class="p-3 text-center uppercase text-xs">${result.s}</td>
+            </tr>`;
+            document.getElementById('reportTable').innerHTML += row;
 
-            // إضافة التفسير العلمي أسفل التقرير
-            const infoBlock = `
-                <div class="p-3 bg-blue-50 rounded-lg border-r-2 border-blue-300">
-                    <strong>${testData.name}:</strong> ${result.info}
-                </div>
-            `;
-            document.getElementById('interpretationList').innerHTML += infoBlock;
+            // إضافة التفسير العلمي
+            const info = `<div class="p-4 rounded-lg border-r-4 ${result.d ? 'border-red-500 bg-red-50' : 'border-blue-500 bg-blue-50'}">
+                <p class="text-sm"><strong>${db.name}:</strong> ${result.m}</p>
+            </div>`;
+            document.getElementById('infoArea').innerHTML += info;
 
-            // مسح حقل النتيجة لإدخال فحص آخر
             document.getElementById('testValue').value = "";
         }
     </script>
