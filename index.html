@@ -42,10 +42,8 @@
                 <select id="testType" class="w-full bg-slate-50 p-4 rounded-2xl mb-4 font-bold border-none outline-none"></select>
                 <input type="number" id="testValue" step="0.001" placeholder="النتيجة" class="w-full bg-slate-100 p-6 rounded-2xl mb-6 text-center text-5xl font-black outline-none border-none">
                 
-                <!-- الأزرار مجمعة لسهولة الاستخدام -->
                 <div class="space-y-3">
                     <button onclick="manualAdd()" class="w-full bg-slate-950 text-white py-5 rounded-2xl font-black hover:bg-indigo-600 transition-all">إضافة للتقرير</button>
-                    <!-- زر التصفير المضاف حديثاً -->
                     <button onclick="clearAllData()" class="w-full bg-rose-50 text-rose-600 py-4 rounded-2xl font-black hover:bg-rose-600 hover:text-white transition-all border border-rose-100">مسح وإفراغ التقرير</button>
                 </div>
             </div>
@@ -85,9 +83,9 @@
         </div>
     </main>
 
-    <!-- نظام الأرشيف (النتائج السابقة) في الزاوية -->
+    <!-- نظام الأرشيف -->
     <button onclick="toggleHistory()" class="no-print fixed bottom-6 left-6 bg-slate-950 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all z-[100] border-2 border-indigo-500">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 we-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
     </button>
@@ -104,40 +102,46 @@
 
     <script>
         const MASTER_DB = {
-            "CBC": { n: "Complete Blood Count", ar: "تعداد الدم الكامل", u: "Index", r: "Normal", k: ["cbc"], c: v => false },
-            "HGB": { n: "Hemoglobin", ar: "الهيموجلوبين", u: "g/dL", r: "12-17.5", k: ["hb", "hgb"], c: v => v < 12 },
+            // --- 1. السكريات (Diabetes Profile) ---
+            "FBS": { n: "FBS", ar: "سكر صائم", u: "mg/dL", r: "70-110", k: ["fbs", "fasting"], c: v => v > 110 },
+            "RBS": { n: "RBS", ar: "سكر عشوائي", u: "mg/dL", r: "80-140", k: ["rbs", "random"], c: v => v > 200 },
+            "PPBS": { n: "PPBS", ar: "سكر بعد الأكل بساعتين", u: "mg/dL", r: "< 140", k: ["ppbs", "post prandial", "2h"], c: v => v > 140 },
+            "HBA1C": { n: "HbA1c", ar: "السكر التراكمي", u: "%", r: "4.0-5.6", k: ["hba1c", "glyco"], c: v => v > 6.4 },
+            "OGTT": { n: "OGTT", ar: "اختبار تحمل الجلوكوز", u: "mg/dL", r: "< 140", k: ["ogtt", "tolerance"], c: v => v > 140 },
+
+            // --- 2. صورة الدم الكاملة (CBC Profile) ---
+            "WBC": { n: "WBC", ar: "كريات الدم البيضاء", u: "10^3/uL", r: "4.0-11.0", k: ["wbc", "white blood"], c: v => v < 4.0 || v > 11.0 },
+            "RBC": { n: "RBC", ar: "كريات الدم الحمراء", u: "10^6/uL", r: "4.5-5.9", k: ["rbc", "red blood"], c: v => v < 4.5 || v > 5.9 },
+            "HGB": { n: "HGB", ar: "الهيموجلوبين", u: "g/dL", r: "13.5-17.5", k: ["hb", "hgb", "hemoglobin"], c: v => v < 13.5 },
+            "HCT": { n: "HCT", ar: "حجم الخلايا المكدسة", u: "%", r: "41-50", k: ["hct", "hematocrit", "pcv"], c: v => v < 41 },
+            "MCV": { n: "MCV", ar: "متوسط حجم الكرية", u: "fL", r: "80-100", k: ["mcv"], c: v => v < 80 || v > 100 },
+            "MCH": { n: "MCH", ar: "متوسط هيموجلوبين الكرية", u: "pg", r: "27-33", k: ["mch"], c: v => v < 27 },
+            "MCHC": { n: "MCHC", ar: "تركيز هيموجلوبين الكرية", u: "g/dL", r: "32-36", k: ["mchc"], c: v => v < 32 },
+            "PLT": { n: "PLT", ar: "الصفائح الدموية", u: "10^3/uL", r: "150-450", k: ["plt", "platelet"], c: v => v < 150 || v > 450 },
+            "RDW": { n: "RDW", ar: "توزيع حجم الحمراء", u: "%", r: "11.5-14.5", k: ["rdw"], c: v => v > 14.5 },
+            
+            // --- 3. تمايز الكريات البيض (WBC Differential) ---
+            "NEUT": { n: "Neutrophils", ar: "العدلات", u: "%", r: "40-75", k: ["neut"], c: v => false },
+            "LYMPH": { n: "Lymphocytes", ar: "اللمفاويات", u: "%", r: "20-45", k: ["lymph"], c: v => false },
+            "MONO": { n: "Monocytes", ar: "الوحيدات", u: "%", r: "2-8", k: ["mono"], c: v => false },
+            "EOS": { n: "Eosinophils", ar: "الحمضات", u: "%", r: "1-4", k: ["eos"], c: v => false },
+
+            // --- 4. الدهون (Lipid Profile) ---
+            "CHOL": { n: "Cholesterol", ar: "الكوليسترول الكلي", u: "mg/dL", r: "< 200", k: ["cholesterol", "chol"], c: v => v > 200 },
+            "TRIG": { n: "Triglycerides", ar: "الدهون الثلاثية", u: "mg/dL", r: "< 150", k: ["triglyceride", "tg", "trig"], c: v => v > 150 },
+            "HDL": { n: "HDL", ar: "الكوليسترول النافع", u: "mg/dL", r: "> 40", k: ["hdl"], c: v => v < 40 },
+            "LDL": { n: "LDL", ar: "الكوليسترول الضار", u: "mg/dL", r: "< 130", k: ["ldl"], c: v => v > 130 },
+            "VLDL": { n: "VLDL", ar: "كوليسترول منخفض جداً", u: "mg/dL", r: "5-40", k: ["vldl"], c: v => v > 40 },
+
+            // --- 5. تحاليل إضافية هامة ---
             "ESR": { n: "ESR", ar: "سرعة الترسيب", u: "mm/hr", r: "0-20", k: ["esr"], c: v => v > 20 },
-            "RETIC": { n: "Reticulocytes", ar: "الخلايا الشبكية", u: "%", r: "0.5-2.5", k: ["retic"], c: v => v > 2.5 },
-            "G6PD": { n: "G6PD", ar: "إنزيم الباقلاء", u: "U/g Hb", r: "7-15", k: ["g6pd"], c: v => v < 7 },
-            "PT": { n: "PT", ar: "زمن البروثرومبين", u: "sec", r: "11-13.5", k: ["pt"], c: v => v > 14 },
-            "INR": { n: "INR", ar: "النسبة الدولية", u: "Ratio", r: "0.8-1.1", k: ["inr"], c: v => v > 1.2 },
-            "DDIMER": { n: "D-Dimer", ar: "دي دايمر", u: "ng/mL", r: "< 500", k: ["d-dimer", "ddimer"], c: v => v > 500 },
-            "UREA": { n: "Urea", ar: "اليوريا", u: "mg/dL", r: "15-45", k: ["urea"], c: v => v > 45 },
-            "CREA": { n: "Creatinine", ar: "الكرياتينين", u: "mg/dL", r: "0.7-1.3", k: ["crea", "creat"], c: v => v > 1.3 },
-            "UA": { n: "Uric Acid", ar: "حمض اليوريك", u: "mg/dL", r: "3.5-7.2", k: ["uric acid", "ua"], c: v => v > 7.2 },
-            "ALT": { n: "ALT (GPT)", ar: "إنزيم كبد", u: "U/L", r: "< 41", k: ["alt", "gpt"], c: v => v > 41 },
-            "AST": { n: "AST (GOT)", ar: "إنزيم كبد", u: "U/L", r: "< 40", k: ["ast", "got"], c: v => v > 40 },
-            "CHOL": { n: "Cholesterol", ar: "الكوليسترول", u: "mg/dL", r: "< 200", k: ["chol"], c: v => v > 200 },
-            "TRIG": { n: "Triglycerides", ar: "الدهون الثلاثية", u: "mg/dL", r: "< 150", k: ["trig", "tg"], c: v => v > 150 },
-            "FBS": { n: "FBS", ar: "سكر صائم", u: "mg/dL", r: "70-100", k: ["fbs", "glucose"], c: v => v > 110 },
-            "HBA1C": { n: "HbA1c", ar: "السكر التراكمي", u: "%", r: "4.0-5.6", k: ["hba1c"], c: v => v > 6.4 },
-            "FERR": { n: "Ferritin", ar: "مخزون الحديد", u: "ng/mL", r: "30-400", k: ["ferritin"], c: v => v < 30 },
-            "TROP": { n: "Troponin", ar: "تروبونين", u: "ng/mL", r: "< 0.04", k: ["troponin", "trop"], c: v => v > 0.04 },
-            "TSH": { n: "TSH", ar: "هرمون الغدة", u: "uIU/mL", r: "0.4-4.5", k: ["tsh"], c: v => v > 4.5 },
-            "PRL": { n: "Prolactin", ar: "هرمون الحليب", u: "ng/mL", r: "4.8-23", k: ["prl", "prolactin"], c: v => v > 23 },
-            "TESTO": { n: "Testosterone", ar: "هرمون الذكورة", u: "ng/dL", r: "240-950", k: ["testo"], c: v => v < 240 },
-            "AMH": { n: "AMH", ar: "مخزون المبيض", u: "ng/mL", r: "1.0-3.0", k: ["amh"], c: v => v < 1.0 },
-            "PSA": { n: "PSA Total", ar: "دليل البروستاتا", u: "ng/mL", r: "< 4.0", k: ["psa"], c: v => v > 4.0 },
-            "CEA": { n: "CEA", ar: "أورام القولون", u: "ng/mL", r: "< 5.0", k: ["cea"], c: v => v > 5.0 },
-            "CA125": { n: "CA-125", ar: "أورام المبيض", u: "U/mL", r: "< 35", k: ["ca125"], c: v => v > 35 },
             "CRP": { n: "CRP", ar: "البروتين الالتهابي", u: "mg/L", r: "< 6.0", k: ["crp"], c: v => v > 6.0 },
-            "RF": { n: "RF", ar: "عامل الروماتويد", u: "IU/mL", r: "< 14", k: ["rf"], c: v => v > 14 },
-            "HCG": { n: "Beta-HCG (Quantitative)", ar: "هرمون الحمل الكمي", u: "mIU/mL", r: "< 5.0", k: ["hcg", "beta-hcg"], c: v => v > 5 },
+            "FERR": { n: "Ferritin", ar: "مخزون الحديد", u: "ng/mL", r: "30-400", k: ["ferritin"], c: v => v < 30 }
         };
 
         let currentResults = {};
         let currentLang = 'ar';
-        let reportHistory = []; // مصفوفة الأرشيف
+        let reportHistory = [];
 
         function addToReport(key, val) {
             currentResults[key] = val;
@@ -156,13 +160,15 @@
 
         function runDiagnosis() {
             let d = []; let severity = 'normal'; const r = currentResults;
-            if (r.PSA > 4 || r.CA125 > 35 || r.TROP > 0.1) {
-                severity = 'critical';
-                if(r.TROP > 0.1) d.push("● تحذير: ارتفاع التروبونين قد يشير لإجهاد قلبي حاد.");
-                if(r.PSA > 4) d.push("● تنبيه: ارتفاع PSA يستدعي مراجعة طبيب المسالك.");
-            }
-            if (r.HBA1C > 6.4 || r.FBS > 125) { if(severity !== 'critical') severity = 'warning'; d.push("● تشخيص مخبري لداء السكري."); }
-            if (r.HGB < 12) { if(severity !== 'critical') severity = 'warning'; d.push(r.FERR < 30 ? "● فقر دم ناتج عن نقص مخزون الحديد." : "● فقر دم (أنيميا)."); }
+            // تشخيص السكر
+            if (r.HBA1C > 6.4 || r.FBS > 125 || r.RBS > 200) { severity = 'warning'; d.push("● تنبيه: مؤشرات سكر دم مرتفعة (Diabetes Risk)."); }
+            // تشخيص فقر الدم
+            if (r.HGB < 12 || r.MCV < 80) { severity = 'warning'; d.push("● مؤشرات فقر دم، يرجى فحص مخزون الحديد."); }
+            // تشخيص الدهون
+            if (r.CHOL > 240 || r.TRIG > 200) { severity = 'warning'; d.push("● ارتفاع في مستوى الدهون الكلية."); }
+            // تشخيص الالتهاب
+            if (r.WBC > 11 || r.CRP > 6) { severity = 'warning'; d.push("● مؤشرات تدل على وجود نشاط التهابي في الجسم."); }
+
             const box = document.getElementById('diagnosisBox');
             const content = document.getElementById('diagnosisContent');
             if (d.length > 0) {
@@ -172,10 +178,8 @@
             } else { box.classList.add('hidden'); }
         }
 
-        // دالة التصفير والمسح الجديدة
         function clearAllData() {
             if (Object.keys(currentResults).length > 0) {
-                // حفظ نسخة في الأرشيف قبل الحذف
                 reportHistory.unshift({ id: document.getElementById('rID').innerText, data: {...currentResults}, date: new Date().toLocaleTimeString('ar-IQ') });
                 if (reportHistory.length > 10) reportHistory.pop();
                 updateHistoryUI();
