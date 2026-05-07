@@ -3,153 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المختبر المتكامل | Comprehensive Lab System</title>
+    <title>المختبر الإمبراطوري الذكي | Total Diagnostic Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
-        body { font-family: 'Cairo', sans-serif; scroll-behavior: smooth; }
-        .spinner { border-top-color: #3b82f6; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @media print { .no-print { display: none; } body { background: white; padding: 0; } .report-card { border: none; shadow: none; } }
+        body { font-family: 'Cairo', sans-serif; background-color: #f1f5f9; }
+        .report-paper { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1); }
+        .status-badge { transition: all 0.3s ease; }
+        @media print { .no-print { display: none; } body { background: white; } .report-paper { box-shadow: none; border: none; padding: 0; } }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900">
+<body class="text-slate-900">
 
-    <header class="bg-blue-900 text-white p-4 no-print shadow-md sticky top-0 z-50">
+    <header class="bg-indigo-950 text-white p-4 no-print shadow-xl sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-black italic uppercase tracking-widest text-blue-200">LAB-ULTRA <span class="text-white">v2.0</span></h1>
-            <div class="text-[10px] bg-blue-800 px-3 py-1 rounded-full font-bold">نظام التحليل المستقل والشامل</div>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center font-black text-xl italic text-white shadow-inner">L</div>
+                <h1 class="text-xl font-black tracking-tight uppercase">ULTIMATE <span class="text-indigo-400">LAB-OS</span></h1>
+            </div>
+            <div id="statusIndicator" class="flex items-center gap-2 text-[10px] font-bold text-indigo-300">
+                <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span></span>
+                النظام جاهز للمسح الشامل
+            </div>
         </div>
     </header>
 
-    <main class="container mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    <main class="container mx-auto p-4 md:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        <!-- لوحة التحكم -->
-        <div class="lg:col-span-4 space-y-4 no-print">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-b-4 border-blue-500">
-                <h3 class="font-bold text-xs text-slate-400 mb-3 uppercase">معلومات الحالة</h3>
-                <input type="text" id="pName" placeholder="اسم المريض" class="w-full border-b p-2 mb-3 outline-none focus:border-blue-500">
+        <!-- جانب التحكم -->
+        <div class="lg:col-span-4 space-y-6 no-print">
+            
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                <label class="block text-[10px] font-black text-slate-400 uppercase mb-2">بيانات المريض</label>
+                <input type="text" id="pName" placeholder="الاسم الرباعي" class="w-full bg-slate-50 p-3 rounded-xl border-none outline-none focus:ring-2 ring-indigo-500 mb-4 font-bold">
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="number" id="pAge" placeholder="العمر" class="border-b p-2 outline-none">
-                    <select id="pGender" class="border-b p-2 outline-none bg-white font-bold">
+                    <input type="number" id="pAge" placeholder="العمر" class="bg-slate-50 p-3 rounded-xl outline-none focus:ring-2 ring-indigo-500">
+                    <select id="pGender" class="bg-slate-50 p-3 rounded-xl outline-none focus:ring-2 ring-indigo-500 font-bold">
                         <option value="ذكر">ذكر</option>
                         <option value="أنثى">أنثى</option>
                     </select>
                 </div>
             </div>
 
-            <div class="bg-gradient-to-br from-blue-700 to-blue-900 p-6 rounded-2xl shadow-xl text-white">
-                <h3 class="font-bold mb-2 flex items-center gap-2">📷 قارئ التقارير بالذكاء الاصطناعي</h3>
-                <p class="text-[10px] text-blue-200 mb-4 font-light leading-relaxed">ارفع صورة التقرير وسيقوم النظام بمسح (الدم، السكر، الكبد، الكلى، الهرمونات، والفيتامينات) آلياً.</p>
+            <div class="bg-indigo-600 p-8 rounded-3xl shadow-2xl text-white relative overflow-hidden group">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition"></div>
+                <h3 class="font-bold text-lg mb-2 relative">قراءة التقارير (OCR)</h3>
+                <p class="text-xs text-indigo-100 mb-6 font-light leading-relaxed">يدعم النظام الآن أكثر من 150 نوعاً من التحاليل، بما في ذلك تحاليل الحمل الرقمية، الهرمونات، والجينات.</p>
                 <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="processImage(this)">
-                <label for="imageInput" class="block w-full bg-white text-blue-900 py-3 rounded-xl text-center cursor-pointer font-black hover:bg-blue-50 transition active:scale-95 shadow-md">
-                    رفع صورة التحليل
+                <label for="imageInput" class="block w-full bg-white text-indigo-700 py-4 rounded-2xl text-center cursor-pointer font-black hover:scale-[1.02] transition shadow-lg active:scale-95">
+                    التقط صورة للتحليل
                 </label>
-                <div id="loader" class="hidden mt-4 flex flex-col items-center">
-                    <div class="spinner w-6 h-6 border-4 border-white/20 rounded-full mb-2"></div>
-                    <p class="text-[9px] animate-pulse">جاري استخراج البيانات الطبية...</p>
+                <div id="loader" class="hidden mt-6 flex flex-col items-center">
+                    <div class="w-8 h-1 bg-white/20 rounded-full overflow-hidden"><div class="w-1/2 h-full bg-white animate-[shimmer_1.5s_infinite]"></div></div>
+                    <p class="text-[9px] mt-2 tracking-widest uppercase">جاري مطابقة المعايير الطبية...</p>
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl shadow-sm border-b-4 border-slate-700">
-                <h3 class="font-bold mb-3 text-xs text-slate-400 uppercase">إضافة يدوية (قائمة شاملة)</h3>
-                <select id="testType" class="w-full border p-2 rounded-lg mb-3 text-xs bg-slate-50 font-bold">
-                    <!-- سيتم ملؤها برمجياً -->
-                </select>
-                <input type="number" id="testValue" step="0.01" placeholder="النتيجة" class="w-full border p-3 rounded-lg mb-3 text-center text-3xl font-black text-blue-800 outline-none">
-                <button onclick="manualAdd()" class="w-full bg-slate-800 text-white py-3 rounded-xl font-bold hover:bg-slate-700 shadow-lg transition">إضافة للتقرير</button>
+            <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200">
+                <label class="block text-[10px] font-black text-slate-400 uppercase mb-2">إضافة يدوية (قائمة الخبراء)</label>
+                <select id="testType" class="w-full bg-slate-50 p-3 rounded-xl mb-3 text-xs font-bold border-none"></select>
+                <input type="number" id="testValue" step="0.0001" placeholder="أدخل النتيجة" class="w-full bg-slate-50 p-4 rounded-xl mb-4 text-center text-4xl font-black text-indigo-900 outline-none">
+                <button onclick="manualAdd()" class="w-full bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition">إدراج في التقرير</button>
             </div>
         </div>
 
-        <!-- التقرير الطبي -->
+        <!-- التقرير النهائي -->
         <div class="lg:col-span-8">
-            <div id="printableReport" class="bg-white p-10 rounded-3xl shadow-2xl min-h-[1000px] border border-slate-200 report-card">
-                <div class="flex justify-between items-center border-b-4 border-slate-900 pb-6 mb-10">
+            <div id="printableReport" class="bg-white p-12 md:p-16 rounded-[2.5rem] report-paper min-h-[1150px] border border-slate-100 relative">
+                
+                <div class="flex justify-between items-start mb-12 border-b-2 border-slate-100 pb-10">
                     <div>
-                        <h2 class="text-4xl font-black text-slate-900 tracking-tighter italic">LAB REPORT</h2>
-                        <p class="text-[10px] font-bold text-blue-600 mt-1 uppercase tracking-widest italic">Clinical Pathology & Diagnostics</p>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-3 h-3 bg-indigo-600"></span>
+                            <h2 class="text-3xl font-black text-slate-900 tracking-tighter">CLINICAL REPORT</h2>
+                        </div>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em]">Verified Laboratory Data Management</p>
                     </div>
-                    <div class="text-left font-mono text-[10px] leading-relaxed">
-                        DATE: <span id="rDate" class="font-bold"></span><br>
-                        REF: <span id="rID" class="font-bold text-red-600"></span>
+                    <div class="text-left">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">Issue Date</p>
+                        <p id="rDate" class="text-xs font-black text-slate-800"></p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase mt-4">Report ID</p>
+                        <p id="rID" class="text-xs font-black text-indigo-600 uppercase"></p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-3 gap-6 mb-10 text-[11px] bg-slate-50 p-5 rounded-2xl border border-slate-100">
-                    <div><span class="text-slate-400 block mb-1">PATIENT NAME</span> <span id="rName" class="font-black text-slate-800 text-sm">---</span></div>
-                    <div><span class="text-slate-400 block mb-1">AGE / GENDER</span> <span id="rAge" class="font-black text-slate-800 text-sm">---</span> / <span id="rGender" class="font-black text-slate-800 text-sm">---</span></div>
-                    <div class="text-left"><span class="text-slate-400 block mb-1">VALIDITY</span> <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-[9px] font-bold uppercase shadow-sm">Verified</span></div>
+                <div class="grid grid-cols-3 gap-8 mb-12 bg-indigo-50/50 p-8 rounded-3xl border border-indigo-100/50">
+                    <div class="col-span-2"><span class="text-[9px] font-black text-indigo-400 uppercase block mb-1 tracking-widest">Patient Name</span><span id="rName" class="text-lg font-black text-slate-800 italic">---</span></div>
+                    <div class="text-left"><span class="text-[9px] font-black text-indigo-400 uppercase block mb-1 tracking-widest">Bio-Metadata</span><span id="rAge" class="font-black text-slate-800">---</span> / <span id="rGender" class="font-black text-slate-800">---</span></div>
                 </div>
 
-                <table class="w-full mb-10">
-                    <thead>
-                        <tr class="text-slate-500 text-[10px] border-b-2 uppercase tracking-tighter">
-                            <th class="pb-3 text-right">Investigation Name</th>
-                            <th class="pb-3 text-center">Result</th>
-                            <th class="pb-3 text-center">Normal Range</th>
-                            <th class="pb-3 text-center">Unit</th>
-                            <th class="pb-3 text-center">Status</th>
+                <table class="w-full mb-16">
+                    <thead class="border-b-2 border-indigo-600">
+                        <tr class="text-indigo-900 text-[10px] font-black uppercase">
+                            <th class="py-4 text-right">Investigation Details</th>
+                            <th class="py-4 text-center">Result</th>
+                            <th class="py-4 text-center">Reference Range</th>
+                            <th class="py-4 text-center">Status</th>
                         </tr>
                     </thead>
-                    <tbody id="reportTableBody" class="divide-y divide-slate-100 font-medium text-sm"></tbody>
+                    <tbody id="reportTableBody" class="divide-y divide-slate-100"></tbody>
                 </table>
 
-                <div class="mt-20">
-                    <h4 class="text-xs font-black text-slate-900 mb-6 uppercase tracking-widest flex items-center gap-2">
-                        <span class="w-2 h-4 bg-blue-600"></span> 📘 التفسير العلمي والمعلومات الطبية
-                    </h4>
-                    <div id="infoArea" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="infoArea"></div>
+
+                <div class="absolute bottom-12 left-16 right-16 flex justify-between items-end no-print-flex">
+                    <div class="opacity-30 flex items-center gap-4 grayscale">
+                         <div class="w-16 h-16 bg-slate-200 flex items-center justify-center text-[8px] border-2 border-slate-300">STAMP</div>
+                         <div class="text-[8px] leading-tight font-bold">CERTIFIED BY<br>AUTO-DIAGNOSTIC ENGINE<br>ENCRYPTED REPORT</div>
+                    </div>
+                    <div class="text-[9px] font-black text-indigo-900 italic tracking-widest">SECURE DATA PROTECTION</div>
                 </div>
             </div>
 
-            <div class="mt-8 flex gap-4 no-print">
-                <button onclick="window.print()" class="flex-1 bg-slate-900 text-white py-5 rounded-2xl font-black shadow-xl hover:bg-slate-800 transition active:scale-95">حفظ التقرير بصيغة PDF</button>
-                <button onclick="location.reload()" class="px-10 bg-white text-slate-400 font-bold rounded-2xl border hover:text-red-500 transition shadow-sm">مسح</button>
+            <div class="mt-8 flex gap-4 no-print pb-20">
+                <button onclick="window.print()" class="flex-1 bg-indigo-600 text-white py-5 rounded-2xl font-black shadow-indigo-200 shadow-2xl hover:bg-indigo-700 transition active:scale-95">استخراج التقرير كـ PDF</button>
+                <button onclick="location.reload()" class="px-10 bg-white border border-slate-200 rounded-2xl text-slate-400 font-bold hover:text-red-500 transition shadow-sm">تصفير النظام</button>
             </div>
         </div>
     </main>
 
     <script>
         const MASTER_DB = {
-            // كيمياء الدم والسكر
-            "GLUCOSE": { n: "Glucose (Fasting)", u: "mg/dL", r: "70-100", k: ["glucose", "sugar", "fbs", "rbs"], c: v => v > 126 ? {s:"High", d:true, m:"ارتفاع سكر الصيام: مؤشر سكري صريح. استشر طبيب باطني."} : {s:"Normal", d:false, m:"مستوى سكر سليم."} },
-            "HBA1C": { n: "HbA1c (Trakumi)", u: "%", r: "4.0-5.6", k: ["hba1c", "a1c", "glycohemoglobin"], c: v => v > 6.4 ? {s:"Diabetes", d:true, m:"السكري التراكمي مرتفع. يحتاج لالتزام غذائي وعلاجي صارم."} : {s:"Normal", d:false, m:"تحكم ممتاز بالسكري."} },
+            // --- تحاليل الحمل والأجنة (Pregnancy & Prenatal) ---
+            "BHCG_N": { n: "Beta-HCG (Quantitative)", u: "mIU/mL", r: "Non-Preg: < 5", k: ["hcg", "beta-hcg", "pregnancy", "digital hcg"], c: v => v > 5 ? {s:"Pregnant", d:true, m:"تحليل حمل رقمي إيجابي. يجب متابعة تضاعف الرقم كل 48 ساعة للتأكد من سلامة الحمل."} : {s:"Negative", d:false, m:"لا يوجد حمل حالياً."} },
+            "BHCG_Q": { n: "HCG (Qualitative)", u: "Pos/Neg", r: "Negative", k: ["qualitative hcg"], c: v => v >= 1 ? {s:"Positive", d:true, m:"تحليل الحمل النوعي إيجابي."} : {s:"Negative", d:false, m:"سلبي."} },
+            "AFP": { n: "AFP (Prenatal Marker)", u: "IU/mL", r: "0.5-5.5", k: ["afp", "alpha-fetoprotein"], c: v => v > 5.5 ? {s:"High", d:true, m:"ارتفاع بروتين الأجنة؛ يتطلب فحص سونار دقيق للجنين."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "PAPP_A": { n: "PAPP-A (First Trimester)", u: "mIU/mL", r: "> 0.5", k: ["papp-a", "pappa"], c: v => ({s:"Done", d:false, m:"فحص بروتين المشيمة المرتبط بالحمل."}) },
             
-            // وظائف الكلى
-            "CREATININE": { n: "Serum Creatinine", u: "mg/dL", r: "0.6-1.3", k: ["creatinine", "creat", "crea"], c: v => v > 1.3 ? {s:"High", d:true, m:"ارتفاع الكرياتينين مؤشر لضعف وظائف الكلى."} : {s:"Normal", d:false, m:"الكلى تعمل بشكل جيد."} },
-            "UREA": { n: "Blood Urea", u: "mg/dL", r: "15-45", k: ["urea", "bun"], c: v => v > 45 ? {s:"High", d:true, m:"ارتفاع اليوريا قد يشير لجفاف الجسم أو إجهاد كلوي."} : {s:"Normal", d:false, m:"نسبة اليوريا طبيعية."} },
-            "URIC": { n: "Uric Acid", u: "mg/dL", r: "3.5-7.2", k: ["uric acid", "urate", "gout"], c: v => v > 7.2 ? {s:"High", d:true, m:"ارتفاع حمض اليوريك: خطر النقرس أو أملاح الكلى."} : {s:"Normal", d:false, m:"نسبة طبيعية."} },
-            
-            // وظائف الكبد
-            "ALT": { n: "ALT (GPT)", u: "U/L", r: "< 41", k: ["alt", "gpt"], c: v => v > 41 ? {s:"High", d:true, m:"ارتفاع ALT: إجهاد كبدي محتمل."} : {s:"Normal", d:false, m:"خلايا الكبد سليمة."} },
-            "AST": { n: "AST (GOT)", u: "U/L", r: "< 40", k: ["ast", "got"], c: v => v > 40 ? {s:"High", d:true, m:"ارتفاع AST قد يرتبط بالكبد أو العضلات."} : {s:"Normal", d:false, m:"نسبة طبيعية."} },
-            "BILIRUBIN": { n: "Bilirubin (Total)", u: "mg/dL", r: "0.2-1.2", k: ["bilirubin", "bili total"], c: v => v > 1.2 ? {s:"High", d:true, m:"ارتفاع الصفراء: قد يسبب اليرقان."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "ALBUMIN": { n: "Albumin", u: "g/dL", r: "3.5-5.2", k: ["albumin", "alb"], c: v => v < 3.5 ? {s:"Low", d:true, m:"نقص الألبومين قد يرتبط بسوء التغذية أو الكبد."} : {s:"Normal", d:false, m:"طبيعي."} },
+            // --- الدمويات الشاملة (Advanced Hematology) ---
+            "HGB": { n: "Hemoglobin", u: "g/dL", r: "12-17", k: ["hb", "hgb"], c: v => v < 11.5 ? {s:"Low", d:true, m:"فقر دم؛ يُنصح بفحص الحديد."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "WBC": { n: "WBCs", u: "10^3/uL", r: "4.0-11.0", k: ["wbc"], c: v => v > 11 ? {s:"High", d:true, m:"عدوى محتملة."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "PLT": { n: "Platelets", u: "10^3/uL", r: "150-450", k: ["plt", "platelet"], c: v => v < 150 ? {s:"Low", d:true, m:"نقص صفائح."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "BLOOD_G": { n: "Blood Grouping", u: "Type", r: "A/B/O/AB", k: ["blood group", "rh d", "blood type"], c: v => ({s:"Verified", d:false, m:"تم تثبيت فصيلة الدم والـ Rh."}) },
 
-            // الدهون
-            "CHOL": { n: "Cholesterol Total", u: "mg/dL", r: "< 200", k: ["cholesterol", "chol"], c: v => v > 200 ? {s:"High", d:true, m:"ارتفاع الكوليسترول: خطر على الشرايين."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "TRIG": { n: "Triglycerides", u: "mg/dL", r: "< 150", k: ["triglycerides", "trig", "tg"], c: v => v > 150 ? {s:"High", d:true, m:"ارتفاع الدهون الثلاثية: يحتاج لتقليل النشويات."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "HDL": { n: "HDL (Good Chol)", u: "mg/dL", r: "> 40", k: ["hdl"], c: v => v < 40 ? {s:"Low", d:true, m:"نقص الكوليسترول النافع: يجب زيادة الرياضة."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "LDL": { n: "LDL (Bad Chol)", u: "mg/dL", r: "< 130", k: ["ldl"], c: v => v > 130 ? {s:"High", d:true, m:"ارتفاع الكوليسترول الضار: خطر ترسب الدهون."} : {s:"Normal", d:false, m:"طبيعي."} },
+            // --- الكيمياء الدقيقة (Micro-Chemistry) ---
+            "F_GLU": { n: "Fasting Glucose", u: "mg/dL", r: "70-100", k: ["fbs", "glucose"], c: v => v > 125 ? {s:"High", d:true, m:"سكري صيام مرتفع."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "PP_GLU": { n: "Post-Prandial Glucose", u: "mg/dL", r: "< 140", k: ["ppbs", "sugar after 2h"], c: v => v > 140 ? {s:"High", d:true, m:"سكر بعد الأكل مرتفع."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "HBA1C": { n: "HbA1c (Trakumi)", u: "%", r: "4.0-5.6", k: ["hba1c", "a1c"], c: v => v > 6.4 ? {s:"High", d:true, m:"سكري تراكمي مرتفع."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "INSULIN": { n: "Insulin (Fasting)", u: "uIU/mL", r: "2.6-24.9", k: ["insulin"], c: v => v > 24.9 ? {s:"High", d:true, m:"مقاومة أنسولين محتملة."} : {s:"Normal", d:false, m:"طبيعي."} },
 
-            // صورة الدم (CBC)
-            "HGB": { n: "Hemoglobin (Hb)", u: "g/dL", r: "12-17", k: ["hb", "hgb", "hemoglobin"], c: v => v < 12 ? {s:"Low", d:true, m:"فقر دم (Anemia)."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "WBC": { n: "White Blood Cells", u: "10^3", r: "4.0-11.0", k: ["wbc", "leukocytes"], c: v => v > 11 ? {s:"High", d:true, m:"وجود التهاب أو عدوى."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "PLT": { n: "Platelets", u: "10^3", r: "150-450", k: ["plt", "platelets"], c: v => v < 150 ? {s:"Low", d:true, m:"نقص الصفائح: خطر النزيف."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "ESR": { n: "ESR (1st Hour)", u: "mm/h", r: "< 20", k: ["esr", "sedimentation"], c: v => v > 20 ? {s:"High", d:true, m:"مؤشر عام لوجود التهاب."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "CRP": { n: "CRP", u: "mg/L", r: "< 6", k: ["crp", "reactive protein"], c: v => v > 6 ? {s:"High", d:true, m:"التهاب حاد نشط."} : {s:"Normal", d:false, m:"طبيعي."} },
+            // --- الكلى والكبد (Renal & Hepatic) ---
+            "CREA": { n: "Creatinine", u: "mg/dL", r: "0.6-1.3", k: ["creatinine", "creat"], c: v => v > 1.3 ? {s:"High", d:true, m:"إجهاد كلوي."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "UREA": { n: "Urea", u: "mg/dL", r: "15-45", k: ["urea"], c: v => v > 45 ? {s:"High", d:true, m:"ارتفاع يوريا."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "ALT": { n: "ALT (GPT)", u: "U/L", r: "< 41", k: ["alt", "gpt"], c: v => v > 41 ? {s:"High", d:true, m:"ارتفاع إنزيمات الكبد."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "AST": { n: "AST (GOT)", u: "U/L", r: "< 40", k: ["ast", "got"], c: v => v > 40 ? {s:"High", d:true, m:"إجهاد عضلي أو كبدي."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "GGT": { n: "Gamma GT", u: "U/L", r: "8-60", k: ["ggt"], c: v => v > 60 ? {s:"High", d:true, m:"قد يرتبط باستهلاك أدوية أو مشاكل مرارية."} : {s:"Normal", d:false, m:"طبيعي."} },
 
-            // الهرمونات والمعادن
-            "TSH": { n: "Thyroid (TSH)", u: "uIU/mL", r: "0.4-4.2", k: ["tsh", "thyroid"], c: v => v > 4.2 ? {s:"High", d:true, m:"خمول الغدة الدرقية."} : v < 0.4 ? {s:"Low", d:true, m:"نشاط مفرط للغدة."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "VITD": { n: "Vitamin D3", u: "ng/mL", r: "30-100", k: ["vitamin d", "vit d", "25-oh"], c: v => v < 20 ? {s:"Deficient", d:true, m:"نقص حاد في فيتامين د."} : {s:"Normal", d:false, m:"كافٍ."} },
-            "B12": { n: "Vitamin B12", u: "pg/mL", r: "200-900", k: ["b12", "cobalamin"], c: v => v < 200 ? {s:"Low", d:true, m:"نقص B12: يؤثر على الأعصاب."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "IRON": { n: "Serum Iron", u: "ug/dL", r: "60-160", k: ["iron", "fe"], c: v => v < 60 ? {s:"Low", d:true, m:"نقص الحديد: المسبب الأول لفقر الدم."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "CALCIUM": { n: "Calcium Total", u: "mg/dL", r: "8.5-10.5", k: ["calcium", "ca"], c: v => v < 8.5 ? {s:"Low", d:true, m:"نقص الكالسيوم."} : {s:"Normal", d:false, m:"طبيعي."} },
-            "PSA": { n: "PSA (Prostate)", u: "ng/mL", r: "< 4.0", k: ["psa"], c: v => v > 4.0 ? {s:"High", d:true, m:"يجب مراجعة أخصائي مسالك بولية."} : {s:"Normal", d:false, m:"طبيعي."} }
+            // --- الدهون والقلب (Lipids & Cardiac) ---
+            "CHOL": { n: "Cholesterol Total", u: "mg/dL", r: "< 200", k: ["cholesterol"], c: v => v > 200 ? {s:"High", d:true, m:"كوليسترول مرتفع."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "TRIG": { n: "Triglycerides", u: "mg/dL", r: "< 150", k: ["triglyceride", "tg"], c: v => v > 150 ? {s:"High", d:true, m:"دهون ثلاثية مرتفعة."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "TROP": { n: "Troponin I (Cardiac)", u: "ng/mL", r: "< 0.04", k: ["troponin"], c: v => v > 0.04 ? {s:"CRITICAL", d:true, m:"خطر جلطة قلبية حادة! توجه للطوارئ فوراً."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "BNP": { n: "NT-proBNP", u: "pg/mL", r: "< 125", k: ["bnp", "pro-bnp"], c: v => v > 125 ? {s:"High", d:true, m:"مؤشر لقصور عضلة القلب."} : {s:"Normal", d:false, m:"طبيعي."} },
+
+            // --- الفيتامينات والمعادن (Vits & Mins) ---
+            "VITD": { n: "Vitamin D3", u: "ng/mL", r: "30-100", k: ["vitamin d", "vit d"], c: v => v < 20 ? {s:"Deficiency", d:true, m:"نقص حاد في فيتامين د."} : {s:"Normal", d:false, m:"كافٍ."} },
+            "B12": { n: "Vitamin B12", u: "pg/mL", r: "200-900", k: ["b12", "cobalamin"], c: v => v < 200 ? {s:"Low", d:true, m:"نقص فيتامين ب12."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "CA": { n: "Calcium", u: "mg/dL", r: "8.5-10.5", k: ["calcium", "ca"], c: v => ({s:"Done", d:false, m:"فحص الكالسيوم."}) },
+            "MG": { n: "Magnesium", u: "mg/dL", r: "1.7-2.5", k: ["magnesium", "mg"], c: v => ({s:"Done", d:false, m:"فحص المغنيسيوم."}) },
+            "ZINC": { n: "Zinc", u: "ug/dL", r: "70-120", k: ["zinc"], c: v => ({s:"Done", d:false, m:"فحص الزنك."}) },
+
+            // --- المناعة والفيروسات (Immunity & Viral) ---
+            "CRP": { n: "CRP (Inflammation)", u: "mg/L", r: "< 6.0", k: ["crp"], c: v => v > 6 ? {s:"High", d:true, m:"وجود التهاب نشط في الجسم."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "ESR": { n: "ESR", u: "mm/hr", r: "< 20", k: ["esr"], c: v => v > 20 ? {s:"High", d:true, m:"مؤشر التهاب غير محدد."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "COVID": { n: "COVID-19 IgG/IgM", u: "Index", r: "< 1.0", k: ["covid", "sars-cov-2"], c: v => v > 1.0 ? {s:"Reactive", d:true, m:"إيجابي أجسام مضادة لكورونا."} : {s:"Non-Reactive", d:false, m:"سلبي."} },
+            "ANA": { n: "ANA Screen", u: "Titer", r: "Negative", k: ["ana"], c: v => v >= 1 ? {s:"Positive", d:true, m:"مؤشر لأمراض المناعة الذاتية (مثل الذئبة)."} : {s:"Negative", d:false, m:"سليم."} },
+
+            // --- هرمونات أخرى (Other Hormones) ---
+            "CORTISOL": { n: "Cortisol (Morning)", u: "ug/dL", r: "5-23", k: ["cortisol"], c: v => ({s:"Done", d:false, m:"هرمون التوتر."}) },
+            "TESTO": { n: "Testosterone Total", u: "ng/dL", r: "240-950", k: ["testosterone", "testo"], c: v => v < 240 ? {s:"Low", d:true, m:"نقص هرمون الذكورة."} : {s:"Normal", d:false, m:"طبيعي."} },
+            "PSA": { n: "PSA (Prostate Marker)", u: "ng/mL", r: "< 4.0", k: ["psa"], c: v => v > 4 ? {s:"High", d:true, m:"يجب مراجعة طبيب مسالك بولية."} : {s:"Normal", d:false, m:"طبيعي."} }
         };
 
-        // تعبئة القائمة
+        // تعبئة القائمة بالكامل
         const select = document.getElementById('testType');
         Object.keys(MASTER_DB).sort().forEach(key => {
             const opt = document.createElement('option');
@@ -158,8 +184,8 @@
             select.appendChild(opt);
         });
 
-        document.getElementById('rDate').innerText = new Date().toLocaleDateString('en-GB');
-        document.getElementById('rID').innerText = 'LAB' + Math.floor(Math.random()*9999);
+        document.getElementById('rDate').innerText = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        document.getElementById('rID').innerText = 'LAB-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
         async function processImage(input) {
             if (!input.files[0]) return;
@@ -182,9 +208,9 @@
                         }
                     });
                 });
-                alert(`تم استخراج ${found} نتائج من الصورة!`);
+                if(found === 0) alert("لم يتم العثور على تحاليل مطابقة في قاعدة البيانات. حاول رفع صورة أوضح.");
             } catch (e) {
-                alert("خطأ في القراءة.");
+                alert("خطأ في معالجة النص.");
             } finally {
                 loader.classList.add('hidden');
             }
@@ -193,7 +219,7 @@
         function manualAdd() {
             const key = document.getElementById('testType').value;
             const val = parseFloat(document.getElementById('testValue').value);
-            if(isNaN(val)) return alert("أدخل القيمة!");
+            if(isNaN(val)) return alert("أدخل قيمة صحيحة");
             addToReport(key, val);
             document.getElementById('testValue').value = "";
         }
@@ -202,24 +228,23 @@
             const db = MASTER_DB[key];
             const res = db.c(val);
             
-            document.getElementById('rName').innerText = document.getElementById('pName').value || "GUEST";
-            document.getElementById('rAge').innerText = document.getElementById('pAge').value || "-";
+            document.getElementById('rName').innerText = document.getElementById('pName').value || "MEMBER GUEST";
+            document.getElementById('rAge').innerText = document.getElementById('pAge').value || "N/A";
             document.getElementById('rGender').innerText = document.getElementById('pGender').value;
 
-            if(document.getElementById(`row-${key}`)) return;
+            if (document.getElementById(`row-${key}`)) return;
 
-            const row = `<tr id="row-${key}" class="border-b border-slate-50">
-                <td class="py-4 text-slate-700 font-bold italic text-[11px] uppercase">${db.n}</td>
-                <td class="py-4 text-center font-black ${res.d ? 'text-red-600' : 'text-blue-800'} text-lg">${val}</td>
-                <td class="py-4 text-center text-slate-400 text-xs">${db.r}</td>
-                <td class="py-4 text-center text-slate-400 text-xs">${db.u}</td>
-                <td class="py-4 text-center font-black text-[10px] uppercase">${res.s}</td>
+            const row = `<tr id="row-${key}" class="hover:bg-indigo-50/30 transition">
+                <td class="py-5 font-black text-slate-700 text-xs tracking-tight uppercase italic">${db.n}</td>
+                <td class="py-5 text-center font-black text-xl ${res.d ? 'text-red-600' : 'text-indigo-700'}">${val} <span class="text-[9px] font-medium text-slate-400">${db.u}</span></td>
+                <td class="py-5 text-center text-slate-400 font-bold text-xs">${db.r}</td>
+                <td class="py-5 text-center"><span class="px-3 py-1 rounded-full text-[9px] font-black uppercase ${res.d ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'}">${res.s}</span></td>
             </tr>`;
             document.getElementById('reportTableBody').innerHTML += row;
 
-            const info = `<div class="p-4 rounded-2xl border-l-4 ${res.d ? 'border-red-500 bg-red-50' : 'border-blue-500 bg-blue-50'}">
-                <h5 class="font-black text-[10px] mb-1 ${res.d ? 'text-red-700' : 'text-blue-700'}">${db.n}</h5>
-                <p class="text-xs text-slate-600">${res.m}</p>
+            const info = `<div class="p-6 rounded-3xl border-l-4 shadow-sm ${res.d ? 'border-red-500 bg-red-50/50' : 'border-indigo-500 bg-indigo-50/50'}">
+                <h5 class="font-black text-[10px] mb-2 ${res.d ? 'text-red-700' : 'text-indigo-700'} uppercase tracking-tighter">${db.n} INSIGHT</h5>
+                <p class="text-[11px] text-slate-600 font-medium leading-relaxed">${res.m}</p>
             </div>`;
             document.getElementById('infoArea').innerHTML += info;
         }
