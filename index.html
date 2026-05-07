@@ -3,318 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام مختبر القدس المتكامل | Al-Quds Lab System v16.0</title>
+    <title>نظام مختبر القدس المتكامل v19.0 | AL-QUDS MEGA LAB</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src='https://unpkg.com/tesseract.js@v2.1.0/dist/tesseract.min.js'></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
-        body { font-family: 'Cairo', sans-serif; background: #eff6ff; scroll-behavior: smooth; }
-        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
-        .report-shadow { box-shadow: 0 50px 100px -20px rgba(0,0,0,0.15), 0 30px 60px -30px rgba(0,0,0,0.2); }
-        .status-badge { transition: all 0.3s ease; cursor: default; }
-        .status-badge:hover { transform: scale(1.1); }
-        @media print { .no-print { display: none !important; } .print-area { box-shadow: none !important; border: none !important; padding: 0 !important; width: 100% !important; } body { background: white; } }
-        .loading-ring { border: 4px solid #f3f3f3; border-top: 4px solid #3b82f6; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .critical-alert { background: linear-gradient(90deg, #991b1b, #dc2626); animation: shake 0.5s ease-in-out infinite alternate; }
-        @keyframes shake { from { transform: translateX(0); } to { transform: translateX(5px); } }
+        body { font-family: 'Cairo', sans-serif; background-color: #f1f5f9; scroll-behavior: smooth; }
+        .report-paper { border-radius: 4rem; box-shadow: 0 50px 100px -20px rgba(0,0,0,0.2); border-top: 20px solid #1e293b; background: white; }
+        .status-badge { transition: all 0.3s ease; }
+        @media print { .no-print { display: none !important; } .report-paper { box-shadow: none; border: none; margin: 0; padding: 0; width: 100%; } }
+        .alert-glow { animation: alert-pulse 1.5s infinite; background: linear-gradient(90deg, #991b1b, #dc2626); }
+        @keyframes alert-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
     </style>
 </head>
-<body class="antialiased">
+<body class="p-2 md:p-6 text-slate-900">
 
-    <nav class="bg-slate-900 text-white p-4 sticky top-0 z-[1000] no-print border-b border-blue-500/30">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center font-black text-2xl shadow-lg shadow-blue-500/20">Q</div>
-                <div>
-                    <h1 class="text-xl font-black tracking-tight leading-none uppercase">Al-Quds Lab</h1>
-                    <span class="text-[10px] text-blue-400 font-bold tracking-[0.2em]">ULTIMATE DIAGNOSTIC SYSTEM v16.0</span>
-                </div>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-500 px-6 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-                    حفظ التقرير بصيغة PDF
-                </button>
+    <nav class="bg-slate-900 text-white p-6 rounded-[2.5rem] mb-10 no-print flex justify-between items-center shadow-2xl border-b-4 border-indigo-600">
+        <div class="flex items-center gap-4">
+            <div class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center font-black text-3xl italic shadow-indigo-500/50 shadow-lg">Q</div>
+            <div>
+                <h1 class="text-2xl font-black uppercase tracking-tighter leading-none">Al-Quds Lab <span class="text-indigo-400">Mega v19.0</span></h1>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.4em]">Advanced Diagnostic System</p>
             </div>
         </div>
+        <button onclick="window.print()" class="bg-indigo-600 hover:bg-indigo-500 px-10 py-3 rounded-2xl font-black text-sm transition-all shadow-xl">حفظ PDF</button>
     </nav>
 
-    <div class="container mx-auto p-4 lg:p-10">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <div class="lg:col-span-4 space-y-6 no-print">
-                <div class="bg-slate-900 rounded-[2.5rem] p-8 text-white shadow-2xl relative overflow-hidden group">
-                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-600/20 rounded-full blur-3xl group-hover:bg-blue-600/40 transition-all"></div>
-                    <h3 class="text-lg font-black mb-6 flex items-center gap-2">
-                        <span class="w-2 h-8 bg-blue-500 rounded-full"></span>
-                        القارئ الضوئي الذكي (OCR)
-                    </h3>
-                    <input type="file" id="ocrInput" class="hidden" onchange="handleOCR(this)">
-                    <label for="ocrInput" class="block w-full py-6 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl text-center font-black cursor-pointer transition-all shadow-xl shadow-blue-900/20 active:scale-95">
-                        تحميل صورة التحليل
-                    </label>
-                    <div id="ocrLoader" class="hidden mt-6 flex items-center justify-center gap-4">
-                        <div class="loading-ring"></div>
-                        <span class="text-xs font-bold text-blue-300 italic animate-pulse">جاري مطابقة كافة الفحوصات...</span>
-                    </div>
-                </div>
-
-                <div class="glass-panel rounded-[2.5rem] p-8 shadow-xl border border-blue-100">
-                    <h3 class="text-xs font-black text-slate-400 mb-6 uppercase tracking-widest italic">إدخال البيانات يدوياً</h3>
-                    <div class="space-y-4">
-                        <div class="relative">
-                            <select id="testSelect" class="w-full p-4 bg-slate-50 rounded-2xl font-bold border-2 border-transparent focus:border-blue-500 outline-none transition-all appearance-none"></select>
-                            <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 font-black">▼</div>
-                        </div>
-                        <input type="text" id="testVal" placeholder="أدخل النتيجة هنا" class="w-full p-6 bg-slate-100 rounded-3xl text-center text-5xl font-black text-blue-700 outline-none border-none focus:ring-4 ring-blue-50">
-                        <button onclick="addManualTest()" class="w-full py-5 bg-slate-900 hover:bg-blue-700 text-white rounded-3xl font-black transition-all shadow-xl shadow-slate-200">
-                            تحديث التقرير الحـالي
-                        </button>
-                    </div>
-                    
-                    <div class="mt-8 pt-8 border-t border-slate-100 grid grid-cols-2 gap-4">
-                        <button onclick="clearAll()" class="text-rose-500 text-[10px] font-black uppercase tracking-tighter hover:underline">× تصفية التقرير</button>
-                        <button onclick="toggleHistory()" class="text-blue-600 text-[10px] font-black uppercase tracking-tighter hover:underline">الأرشيف الحـافظ</button>
-                    </div>
-                </div>
+    <main class="container mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10">
+        
+        <div class="lg:col-span-4 space-y-6 no-print">
+            <div class="bg-slate-900 p-8 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-indigo-500"></div>
+                <h3 class="font-black text-lg mb-6 flex items-center gap-2">الماسح الضوئي الذكي (OCR)</h3>
+                <input type="file" id="ocrFile" class="hidden" onchange="runOCR(this)">
+                <label for="ocrFile" class="block w-full py-6 bg-white text-slate-900 rounded-3xl text-center font-black cursor-pointer hover:bg-indigo-50 transition-all shadow-2xl">رفع وتحليل الصورة</label>
+                <div id="ocrStatus" class="hidden mt-4 text-center animate-bounce text-indigo-400 text-xs font-black italic">جاري مطابقة كافة الفحوصات...</div>
             </div>
 
-            <div class="lg:col-span-8">
-                <div id="reportContainer" class="bg-white p-8 md:p-16 rounded-[4rem] report-shadow print-area min-h-[1200px] border border-slate-100 relative">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b-4 border-slate-900 pb-10 mb-12 gap-6">
-                        <div>
-                            <h2 class="text-5xl font-black italic tracking-tighter text-slate-900">LAB RESULTS</h2>
-                            <p class="text-blue-600 font-black text-sm tracking-[0.3em] uppercase mt-1">Al-Quds Medical Laboratory</p>
-                            <div class="flex gap-4 mt-4 no-print">
-                                <span class="bg-slate-100 px-4 py-1 rounded-full text-[9px] font-black text-slate-400">QR-SECURE: VALID</span>
-                                <span class="bg-green-100 px-4 py-1 rounded-full text-[9px] font-black text-green-600">ENCRYPTED DATA</span>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-slate-300 text-[10px] font-black">REPORT REFERENCE</div>
-                            <div id="repID" class="text-slate-900 font-black text-xl mb-4 italic uppercase"></div>
-                            <div class="text-slate-300 text-[10px] font-black uppercase">Date of Issue</div>
-                            <div id="repDate" class="text-slate-900 font-black text-lg"></div>
-                        </div>
-                    </div>
-
-                    <div id="diagPanel" class="hidden p-10 rounded-[3.5rem] text-white mb-16 shadow-2xl transition-all duration-700 relative overflow-hidden">
-                        <div class="relative z-10">
-                            <div class="flex items-center gap-3 mb-6">
-                                <span class="px-4 py-1 bg-white/20 rounded-full text-[10px] font-black tracking-widest uppercase">AI Analysis</span>
-                                <div class="h-[1px] flex-grow bg-white/20"></div>
-                            </div>
-                            <div id="diagContent" class="text-xl md:text-2xl font-bold leading-relaxed space-y-6"></div>
-                        </div>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead>
-                                <tr class="text-slate-400 text-[11px] font-black uppercase tracking-widest border-b-2 border-slate-50">
-                                    <th class="py-6 text-right">Investigation Name</th>
-                                    <th class="py-6 text-center">Patient Result</th>
-                                    <th class="py-6 text-center">Reference Range</th>
-                                    <th class="py-6 text-center">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="resultsBody" class="divide-y divide-slate-50"></tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-24 pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center opacity-40 grayscale gap-6">
-                        <div class="text-[10px] font-bold max-w-sm text-center md:text-right">هذا التقرير تم استخراجه بواسطة نظام الذكاء الاصطناعي للمساعدة في القراءة الأولية. يجب مراجعة الطبيب المختص للتشخيص النهائي.</div>
-                        <div class="flex items-center gap-3 italic font-black text-sm">
-                            <div class="w-10 h-10 bg-slate-900 rounded-lg flex items-center justify-center text-white">Q</div>
-                            SYSTEM SECURE BY AL-QUDS LAB
-                        </div>
-                    </div>
+            <div class="bg-white p-8 rounded-[3rem] shadow-xl border border-slate-200">
+                <h3 class="text-[10px] font-black text-slate-400 mb-6 uppercase tracking-widest italic text-center">الإدخال اليدوي الشامل</h3>
+                <div class="space-y-4">
+                    <select id="testSelect" class="w-full p-4 bg-slate-50 rounded-2xl font-black border-2 border-transparent focus:border-indigo-500 outline-none"></select>
+                    <input type="text" id="testValue" placeholder="أدخل النتيجة" class="w-full p-6 bg-slate-100 rounded-3xl text-center text-5xl font-black text-indigo-700 outline-none border-none">
+                    <button onclick="manualAdd()" class="w-full py-6 bg-slate-950 text-white rounded-3xl font-black hover:bg-indigo-600 transition-all shadow-xl">تحديث السجل</button>
+                </div>
+                <div class="mt-8 pt-8 border-t flex justify-between px-2">
+                    <button onclick="clearCurrent()" class="text-rose-500 text-[10px] font-black uppercase hover:underline">× تفريغ</button>
+                    <button onclick="toggleHist()" class="text-indigo-600 text-[10px] font-black uppercase hover:underline">الأرشيف الحافظ</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="histPanel" class="fixed inset-y-0 left-0 w-80 bg-white shadow-3xl z-[2000] transform -translate-x-full transition-transform duration-500 no-print border-r border-blue-50">
-        <div class="bg-slate-900 p-8 text-white">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-black text-xl italic uppercase">History</h3>
-                <button onclick="toggleHistory()" class="text-blue-400 font-bold hover:rotate-90 transition-all">✕</button>
+        <div class="lg:col-span-8">
+            <div id="reportBox" class="report-paper p-10 md:p-16 min-h-[1200px]">
+                
+                <div id="diagBox" class="hidden p-10 rounded-[3.5rem] text-white mb-12 shadow-2xl transition-all border-4">
+                    <div id="diagIn" class="text-xl font-bold leading-relaxed space-y-4"></div>
+                </div>
+
+                <div class="flex justify-between items-end border-b-8 border-slate-900 pb-10 mb-12">
+                    <div>
+                        <h2 class="text-6xl font-black italic tracking-tighter text-slate-900 uppercase">REPORT</h2>
+                        <p class="text-indigo-600 font-black text-sm tracking-[0.4em] uppercase">Jerusalem Medical Laboratory</p>
+                    </div>
+                    <div class="text-left font-black text-xs uppercase leading-tight">
+                        REF: <span id="repID" class="text-indigo-600"></span><br>
+                        DATE: <span id="repDate"></span>
+                    </div>
+                </div>
+
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-slate-400 text-[10px] font-black uppercase border-b-2 tracking-widest">
+                            <th class="py-4 text-right">Investigation / الفحص</th>
+                            <th class="py-4 text-center">Result / النتيجة</th>
+                            <th class="py-4 text-center">Reference / الطبيعي</th>
+                            <th class="py-4 text-center">Status / الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="repBody" class="divide-y divide-slate-100"></tbody>
+                </table>
             </div>
-            <p class="text-xs text-slate-400 font-bold">سجل التقارير المحفوظة (v16.0)</p>
         </div>
-        <div id="histContent" class="p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-160px)]"></div>
+    </main>
+
+    <div id="histSide" class="fixed inset-y-0 left-0 w-80 bg-white shadow-3xl z-[2000] transform -translate-x-full transition-transform duration-500 no-print border-r-4 border-indigo-600">
+        <div class="bg-slate-950 p-8 text-white">
+            <h3 class="font-black text-2xl italic uppercase mb-2">Archive</h3>
+            <button onclick="toggleHist()" class="text-indigo-400 font-bold">إغلاق ✕</button>
+        </div>
+        <div id="histList" class="p-4 space-y-4 overflow-y-auto h-full"></div>
     </div>
 
     <script>
-        // قاعدة البيانات الكبرى - شاملة لكل شيء (v16.0)
-        const GLOBAL_MASTER_DB = {
-            // سكريات
-            "FBS": { n: "FBS", ar: "سكر صائم", u: "mg/dL", r: "70-110", k: ["fbs", "fasting"], c: v => v > 110 },
-            "RBS": { n: "RBS", ar: "سكر عشوائي", u: "mg/dL", r: "80-140", k: ["rbs", "random"], c: v => v > 160 },
-            "HBA1C": { n: "HbA1c", ar: "السكر التراكمي", u: "%", r: "4.5-5.6", k: ["hba1c", "glyco"], c: v => v > 6.4 },
-            // كلى
-            "CREA": { n: "Creatinine", ar: "الكرياتينين", u: "mg/dL", r: "0.6-1.3", k: ["crea", "creatinine"], c: v => v > 1.3 },
-            "UREA": { n: "Urea", ar: "اليوريا", u: "mg/dL", r: "15-45", k: ["urea"], c: v => v > 45 },
-            "BUN_RATIO": { n: "BUN/Crea Ratio", ar: "نسبة اليوريا/الكرياتينين", u: "Ratio", r: "10-20", k: ["ratio", "bun/crea"], c: v => v > 20 },
-            "UA": { n: "Uric Acid", ar: "حمض اليوريك", u: "mg/dL", r: "3.5-7.2", k: ["ua", "uric"], c: v => v > 7.2 },
-            // كبد وصفراء
-            "ALT": { n: "ALT (SGPT)", ar: "إنزيم كبد", u: "U/L", r: "0-41", k: ["alt", "sgpt"], c: v => v > 41 },
-            "AST": { n: "AST (SGOT)", ar: "إنزيم كبد", u: "U/L", r: "0-40", k: ["ast", "sgot"], c: v => v > 40 },
-            "ALB": { n: "Albumin", ar: "الألبومين", u: "g/dL", r: "3.5-5.2", k: ["alb", "albumin"], c: v => v < 3.5 },
-            "BIL_T": { n: "Bilirubin Total", ar: "الصفراء الكلية", u: "mg/dL", r: "0.2-1.2", k: ["bil-t", "bilirubin"], c: v => v > 1.2 },
-            // دم و لزوجة
-            "HGB": { n: "HGB", ar: "الهيموجلوبين", u: "g/dL", r: "13.0-17.0", k: ["hb", "hgb", "hemoglobin"], c: v => v < 13 },
-            "WBC": { n: "WBC", ar: "الكرات البيضاء", u: "10^3", r: "4.0-11.0", k: ["wbc", "leucocytes"], c: v => v > 11 || v < 4 },
-            "PLT": { n: "PLT", ar: "الصفائح", u: "10^3", r: "150-450", k: ["plt", "platelets"], c: v => v < 150 },
-            "PCV": { n: "PCV", ar: "لزوجة الدم (HCT)", u: "%", r: "37-54", k: ["pcv", "hct"], c: v => v < 37 || v > 54 },
-            // التهابات
-            "ESR": { n: "ESR", ar: "سرعة الترسيب", u: "mm/hr", r: "0-20", k: ["esr"], c: v => v > 20 },
-            "CRP": { n: "CRP", ar: "بروتين الالتهاب", u: "mg/L", r: "0-6", k: ["crp"], c: v => v > 6 },
-            "ASOT": { n: "ASOT", ar: "تيتانوس اللوزتين", u: "IU/ml", r: "< 200", k: ["asot"], c: v => v > 200 },
-            // دهون
-            "CHOL": { n: "Cholesterol", ar: "الكوليسترول", u: "mg/dL", r: "< 200", k: ["chol"], c: v => v > 200 },
-            "TRIG": { n: "Triglycerides", ar: "الدهون الثلاثية", u: "mg/dL", r: "< 150", k: ["trig", "tg"], c: v => v > 150 },
-            "HDL": { n: "HDL", ar: "النافع", u: "mg/dL", r: "> 40", k: ["hdl"], c: v => v < 40 },
-            "LDL": { n: "LDL", ar: "الضار", u: "mg/dL", r: "< 130", k: ["ldl"], c: v => v > 130 },
-            // هرمونات ومعادن
-            "TSH": { n: "TSH", ar: "هرمون الغدة", u: "uIU/ml", r: "0.4-4.5", k: ["tsh"], c: v => v > 4.5 || v < 0.4 },
-            "VITD": { n: "Vit D3", ar: "فيتامين د", u: "ng/ml", r: "30-100", k: ["vit d", "d3"], c: v => v < 30 },
-            "CAL": { n: "Calcium", ar: "الكالسيوم", u: "mg/dL", r: "8.5-10.5", k: ["ca", "calcium"], c: v => v < 8.5 },
-            "FER": { n: "Ferritin", ar: "مخزون الحديد", u: "ng/ml", r: "30-400", k: ["ferritin"], c: v => v < 30 },
-            // إدرار مفصل
-            "U_PUS": { n: "Urine Pus", ar: "خلايا صديدية", u: "hpf", r: "1-4", k: ["pus"], c: v => v > 5 },
-            "U_RBC": { n: "Urine RBCs", ar: "كريات حمراء", u: "hpf", r: "0-2", k: ["rbc", "rbcs"], c: v => v > 2 },
-            "U_SUG": { n: "Urine Sugar", ar: "سكر البول", u: "-", r: "Nil", k: ["sugar", "glucose"], c: v => v != 'Nil' && v != 'Negative' },
-            "U_ALB": { n: "Urine Albumin", ar: "زلال البول", u: "-", r: "Nil", k: ["alb", "albumin", "protein"], c: v => v != 'Nil' && v != 'Negative' }
+        // قاعدة البيانات العملاقة المرتبة تسلسلياً (v19.0)
+        const DB = {
+            // 1. السكريات
+            "FBS": { n: "FBS", ar: "سكر صائم", u: "mg/dL", r: "70-110", k: ["fbs", "fasting"], c: v => v > 110, o: 1 },
+            "RBS": { n: "RBS", ar: "سكر عشوائي", u: "mg/dL", r: "80-140", k: ["rbs", "random"], c: v => v > 160, o: 2 },
+            "HBA1C": { n: "HbA1c", ar: "السكر التراكمي", u: "%", r: "4.5-5.6", k: ["hba1c"], c: v => v > 6.4, o: 3 },
+            // 2. الكلى
+            "CREA": { n: "Creatinine", ar: "الكرياتينين", u: "mg/dL", r: "0.6-1.3", k: ["crea", "creatinine"], c: v => v > 1.3, o: 4 },
+            "UREA": { n: "Urea", ar: "اليوريا", u: "mg/dL", r: "15-45", k: ["urea"], c: v => v > 45, o: 5 },
+            "UA": { n: "Uric Acid", ar: "حمض اليوريك", u: "mg/dL", r: "3.5-7.2", k: ["ua", "uric"], c: v => v > 7.2, o: 6 },
+            // 3. الكبد
+            "ALT": { n: "ALT (SGPT)", ar: "إنزيم كبد", u: "U/L", r: "0-41", k: ["alt", "sgpt"], c: v => v > 41, o: 7 },
+            "AST": { n: "AST (SGOT)", ar: "إنزيم كبد", u: "U/L", r: "0-40", k: ["ast", "sgot"], c: v => v > 40, o: 8 },
+            "BIL_T": { n: "Bilirubin Total", ar: "الصفراء الكلية", u: "mg/dL", r: "0.2-1.2", k: ["bil", "bilirubin"], c: v => v > 1.2, o: 9 },
+            // 4. الدهون
+            "CHOL": { n: "Cholesterol", ar: "الكوليسترول", u: "mg/dL", r: "< 200", k: ["chol"], c: v => v > 200, o: 10 },
+            "TRIG": { n: "Triglycerides", ar: "الدهون الثلاثية", u: "mg/dL", r: "< 150", k: ["trig", "tg"], c: v => v > 150, o: 11 },
+            // 5. الدم والالتهابات
+            "HGB": { n: "HGB", ar: "الهيموجلوبين", u: "g/dL", r: "13-17", k: ["hb", "hgb"], c: v => v < 13, o: 12 },
+            "WBC": { n: "WBC", ar: "الكرات البيضاء", u: "10^3", r: "4-11", k: ["wbc"], c: v => v > 11, o: 13 },
+            "PLT": { n: "PLT", ar: "الصفائح", u: "10^3", r: "150-450", k: ["plt"], c: v => v < 150, o: 14 },
+            "ESR": { n: "ESR", ar: "سرعة الترسيب", u: "mm/hr", r: "0-20", k: ["esr"], c: v => v > 20, o: 15 },
+            "CRP": { n: "CRP", ar: "البروتين الالتهابي", u: "mg/L", r: "0-6", k: ["crp"], c: v => v > 6, o: 16 },
+            // 6. فحوصات الحمل الشاملة (جديد)
+            "PT_QUAL": { n: "Pregnancy (Qual)", ar: "فحص الحمل (النوعي)", u: "-", r: "Negative", k: ["pregnancy test", "pt test"], c: v => v.toLowerCase().includes("pos"), o: 17 },
+            "HCG_QUANT": { n: "S.HCG (Quant)", ar: "هرمون الحمل الرقمي", u: "mIU/mL", r: "< 5.0", k: ["hcg", "beta hcg"], c: v => v > 5, o: 18 },
+            "PT_URINE": { n: "Pregnancy Urine", ar: "فحص حمل إدرار", u: "-", r: "Negative", k: ["urine pt"], c: v => v.toLowerCase().includes("pos"), o: 19 },
+            // 7. هرمونات وفيتامينات
+            "TSH": { n: "TSH", ar: "هرمون الغدة", u: "uIU/mL", r: "0.4-4.5", k: ["tsh"], c: v => v > 4.5, o: 20 },
+            "VITD": { n: "Vitamin D3", ar: "فيتامين د", u: "ng/mL", r: "30-100", k: ["vit d", "d3"], c: v => v < 30, o: 21 },
+            // 8. الإدرار
+            "U_PUS": { n: "Urine Pus", ar: "خلايا صديدية", u: "hpf", r: "1-4", k: ["pus"], c: v => v > 5, o: 22 },
+            "U_RBC": { n: "Urine RBCs", ar: "كريات حمراء", u: "hpf", r: "0-2", k: ["rbc"], c: v => v > 2, o: 23 },
+            "U_ALB": { n: "Urine Albumin", ar: "زلال البول", u: "-", r: "Nil", k: ["alb", "protein"], c: v => v != 'Nil', o: 24 }
         };
 
-        let activeData = {};
-        let archive = JSON.parse(localStorage.getItem('labArchive') || '[]');
+        let current = {};
+        let archive = JSON.parse(localStorage.getItem('alquds_mega_archive') || '[]');
 
-        function updateReportUI(key, val) {
-            activeData[key] = val;
-            const meta = GLOBAL_MASTER_DB[key];
-            const isAlert = meta.c(parseFloat(val) || val);
-            if(document.getElementById(`row-${key}`)) document.getElementById(`row-${key}`).remove();
-
-            const row = `<tr id="row-${key}" class="font-bold border-b border-slate-50 group hover:bg-blue-50 transition-all duration-300">
-                <td class="py-8 text-right">
-                    <div class="text-blue-600 text-xl font-black">${meta.n}</div>
-                    <div class="text-[10px] text-slate-400 uppercase tracking-tighter">${meta.ar}</div>
-                </td>
-                <td class="py-8 text-center text-4xl font-black text-slate-800">
-                    ${val} <span class="text-xs font-normal text-slate-300 uppercase">${meta.u}</span>
-                </td>
-                <td class="py-8 text-center text-slate-400 text-[10px] font-bold">${meta.r}</td>
-                <td class="py-8 text-center">
-                    <span class="status-badge px-6 py-2 rounded-2xl text-[10px] font-black tracking-widest uppercase ${isAlert ? 'bg-rose-50 text-rose-600 border border-rose-100' : 'bg-green-50 text-green-600 border border-green-100'}">
-                        ${isAlert ? 'Abnormal' : 'Normal'}
-                    </span>
-                </td>
-            </tr>`;
-            document.getElementById('resultsBody').innerHTML += row;
-            performAIAnalysis();
+        function updateUI(key, val) {
+            current[key] = val;
+            const body = document.getElementById('repBody');
+            body.innerHTML = "";
+            Object.keys(DB).sort((a,b) => DB[a].o - DB[b].o).forEach(k => {
+                if(current[k]) {
+                    const item = DB[k];
+                    const isAlert = item.c(parseFloat(current[k]) || current[k]);
+                    body.innerHTML += `
+                        <tr class="font-bold border-b border-slate-50 group hover:bg-indigo-50 transition-all duration-300">
+                            <td class="py-8 text-right"><div class="text-indigo-600 text-2xl font-black">${item.n}</div><div class="text-[10px] text-slate-400 uppercase">${item.ar}</div></td>
+                            <td class="py-8 text-center text-4xl font-black">${current[k]} <span class="text-[10px] font-normal text-slate-300 uppercase">${item.u}</span></td>
+                            <td class="py-8 text-center text-slate-400 text-xs font-bold">${item.r}</td>
+                            <td class="py-8 text-center"><span class="px-6 py-2 rounded-2xl text-[10px] font-black uppercase ${isAlert ? 'bg-rose-50 text-rose-600 border border-rose-100' : 'bg-green-50 text-green-600 border border-green-100'}">${isAlert ? 'Abnormal' : 'Normal'}</span></td>
+                        </tr>`;
+                }
+            });
+            runDiagnostics();
         }
 
-        function performAIAnalysis() {
-            let insights = []; let severity = 'normal'; const r = activeData;
-            const num = (v) => parseFloat(v);
+        function runDiagnostics() {
+            let notes = []; let level = 'ok'; const r = current;
+            const f = (v) => parseFloat(v);
 
-            if (num(r.CREA) > 1.3 || num(r.UREA) > 45) {
-                severity = num(r.CREA) > 2 ? 'critical' : 'warning';
-                insights.push("● <b>تحليل وظائف الكلى:</b> يظهر ارتفاع في المستويات. يُنصح بتجنب تناول المسكنات (NSAIDs) وشرب لترين ونصف من الماء يومياً.");
+            if (f(r.HCG_QUANT) > 5 || (r.PT_QUAL && r.PT_QUAL.toLowerCase().includes("pos"))) {
+                notes.push("● <b>نتيجة الحمل:</b> إيجابية (+)؛ نبارك لكم هذه النتيجة وننصح بمتابعة الفيتامينات الأساسية.");
             }
-            if (num(r.HBA1C) > 6.4 || num(r.FBS) > 125) {
-                severity = 'critical';
-                insights.push("● <b>مستوى السكر:</b> القراءات تقع في نطاق الإصابة بالسكري. يجب البدء فوراً بحمية منخفضة الكربوهيدرات ومراجعة طبيب الغدد.");
-            } else if (num(r.HBA1C) >= 5.7 || num(r.FBS) >= 100) {
-                if(severity !== 'critical') severity = 'warning';
-                insights.push("● <b>مرحلة ما قبل السكري:</b> أنت في مرحلة حرجة. ممارسة الرياضة لمدة 30 دقيقة يومياً قد تمنع تطور الحالة لسكري دائم.");
-            }
-            if (num(r.HGB) < 13) {
-                insights.push(`● <b>فقر الدم:</b> الهيموجلوبين منخفض (${r.HGB}). يُنصح بإجراء فحص Ferritin (مخزون الحديد) للتأكد من سبب الأنيميا.`);
-            }
-            if (num(r.ALT) > 41 || num(r.AST) > 40) {
-                if(severity !== 'critical') severity = 'warning';
-                insights.push("● <b>إنزيمات الكبد:</b> الارتفاع قد يشير إلى دهون الكبد أو إجهاد كبدي. يُفضل تقليل الأطعمة الدسمة.");
-            }
-            if (num(r.UA) > 7.2) insights.push("● <b>حمض اليوريك:</b> مرتفع (النقرس). يُنصح بتقليل اللحوم الحمراء والبقوليات والمشروبات الغازية.");
-            if (num(r.ESR) > 20 || num(r.CRP) > 6) insights.push("● <b>مؤشرات الالتهاب:</b> هناك استجابة التهابية في الجسم؛ قد تكون بسبب عدوى بسيطة أو التهاب مزمن.");
-            if (num(r.U_PUS) > 5) insights.push("● <b>المسالك البولية:</b> وجود صديد في البول يستدعي إجراء (Urine Culture) للتأكد من نوع البكتيريا.");
+            if (f(r.CREA) > 1.3 || f(r.UREA) > 45) { level = f(r.CREA)>2?'crit':'warn'; notes.push("● <b>وظائف الكلى:</b> يوجد ارتفاع ملحوظ؛ يجب الابتعاد عن البروتينات العالية والأملاح."); }
+            if (f(r.HBA1C) > 6.4) { level = 'crit'; notes.push("● <b>داء السكري:</b> القراءات مرتفعة؛ يجب البدء فوراً ببرنامج غذائي خالي من السكر."); }
+            if (f(r.HGB) < 13) notes.push("● <b>فقر الدم:</b> الهيموجلوبين منخفض؛ يفضل تناول الأغذية الغنية بالحديد.");
+            if (f(r.U_PUS) > 5) notes.push("● <b>صديد البول:</b> يشير لوجود التهاب في المسالك؛ اشرب الكثير من السوائل.");
 
-            const box = document.getElementById('diagPanel');
-            const content = document.getElementById('diagContent');
-            if (insights.length > 0) {
+            const box = document.getElementById('diagBox');
+            if (notes.length > 0) {
                 box.classList.remove('hidden');
-                content.innerHTML = insights.map(i => `<div class="pb-4 border-b border-white/10 last:border-0">${i}</div>`).join('');
-                box.className = `p-10 rounded-[3.5rem] text-white mb-16 shadow-2xl transition-all duration-500 ${severity === 'critical' ? 'critical-alert' : 'bg-orange-500 border-4 border-orange-300'}`;
+                document.getElementById('diagIn').innerHTML = notes.map(n => `<div class="pb-3 border-b border-white/10 last:border-0">${n}</div>`).join('');
+                box.className = `p-10 rounded-[3.5rem] text-white mb-12 shadow-2xl border-4 transition-all ${level=='crit'?'alert-glow border-rose-400':'bg-orange-500 border-orange-300'}`;
             } else if (Object.keys(r).length > 0) {
-                box.classList.remove('hidden');
-                box.className = "p-10 rounded-[3.5rem] bg-emerald-600 text-white mb-16 shadow-3xl border-4 border-emerald-300 text-center";
-                content.innerHTML = "● جميع فحوصاتك ضمن الحدود الطبيعية. استمر في نمط حياتك الصحي!";
+                box.classList.remove('hidden'); box.className = "p-10 rounded-[3.5rem] bg-emerald-600 text-white mb-12 shadow-2xl border-4 border-emerald-400 text-center";
+                document.getElementById('diagIn').innerHTML = "● جميع فحوصاتك سليمة وضمن الحدود الطبيعية.";
             } else { box.classList.add('hidden'); }
         }
 
-        async function handleOCR(inp) {
-            document.getElementById('ocrLoader').classList.remove('hidden');
+        async function runOCR(inp) {
+            document.getElementById('ocrStatus').classList.remove('hidden');
             const { data: { text } } = await Tesseract.recognize(inp.files[0], 'eng+ara');
-            Object.keys(GLOBAL_MASTER_DB).forEach(key => {
-                GLOBAL_MASTER_DB[key].k.forEach(kw => {
-                    const match = text.match(new RegExp(`${kw}\\D*(\\d+\\.?\\d*)`, 'i'));
-                    if (match) updateReportUI(key, match[1]);
-                    // دعم قراءة الكلمات مثل Nil أو Normal للتحاليل الكيفية
-                    if (text.toLowerCase().includes(kw) && (text.includes("Nil") || text.includes("Normal") || text.includes("Negative"))) updateReportUI(key, "Nil");
+            Object.keys(DB).forEach(k => {
+                DB[k].k.forEach(kw => {
+                    const m = text.match(new RegExp(`${kw}\\D*(\\d+\\.?\\d*)`, 'i'));
+                    if (m) updateUI(k, m[1]);
                 });
             });
-            document.getElementById('ocrLoader').classList.add('hidden');
+            document.getElementById('ocrStatus').classList.add('hidden');
         }
 
-        function addManualTest() {
+        function manualAdd() {
             const k = document.getElementById('testSelect').value;
-            const v = document.getElementById('testVal').value;
-            if(v.trim() !== "") updateReportUI(k, v);
-            document.getElementById('testVal').value = "";
+            const v = document.getElementById('testValue').value;
+            if(v.trim()) updateUI(k, v);
+            document.getElementById('testValue').value = "";
         }
 
-        function clearAll() {
-            if (Object.keys(activeData).length > 0) {
-                archive.unshift({ id: document.getElementById('repID').innerText, data: {...activeData}, date: new Date().toLocaleString() });
-                localStorage.setItem('labArchive', JSON.stringify(archive));
-                renderHistory();
+        function clearCurrent() {
+            if (Object.keys(current).length > 0) {
+                archive.unshift({ id: document.getElementById('repID').innerText, data: {...current}, date: new Date().toLocaleString() });
+                localStorage.setItem('alquds_mega_archive', JSON.stringify(archive));
+                renderHist();
             }
-            activeData = {};
-            document.getElementById('resultsBody').innerHTML = '';
-            document.getElementById('diagPanel').classList.add('hidden');
-            generateNewID();
+            current = {}; document.getElementById('repBody').innerHTML = ""; document.getElementById('diagBox').classList.add('hidden'); genID();
         }
 
-        function renderHistory() {
-            document.getElementById('histContent').innerHTML = archive.map((h, i) => `
-                <div onclick="restoreFromHistory(${i})" class="p-4 bg-slate-50 rounded-2xl border-2 border-transparent hover:border-blue-500 cursor-pointer transition-all">
-                    <div class="flex justify-between text-[10px] font-black text-blue-600 mb-1"><span>${h.id}</span><span>${h.date}</span></div>
+        function renderHist() {
+            document.getElementById('histList').innerHTML = archive.map((h, i) => `
+                <div onclick="loadHist(${i})" class="p-4 bg-slate-50 rounded-2xl border-2 hover:border-indigo-600 cursor-pointer transition-all">
+                    <div class="flex justify-between text-[10px] font-black text-indigo-600 mb-1"><span>${h.id}</span><span>${h.date}</span></div>
                     <div class="text-[9px] text-slate-400 truncate">${Object.keys(h.data).join(', ')}</div>
                 </div>`).join('');
         }
 
-        function restoreFromHistory(i) {
-            const h = archive[i];
-            activeData = {};
-            document.getElementById('resultsBody').innerHTML = '';
-            Object.keys(h.data).forEach(k => updateReportUI(k, h.data[k]));
-            document.getElementById('repID').innerText = h.id;
-            toggleHistory();
+        function loadHist(i) {
+            const h = archive[i]; current = {}; document.getElementById('repBody').innerHTML = "";
+            Object.keys(h.data).forEach(k => updateUI(k, h.data[k]));
+            document.getElementById('repID').innerText = h.id; toggleHist();
         }
 
-        function toggleHistory() { document.getElementById('histPanel').classList.toggle('-translate-x-full'); }
-        function generateNewID() { document.getElementById('repID').innerText = 'ALQ-' + Math.random().toString(36).substr(2, 7).toUpperCase(); }
+        function toggleHist() { document.getElementById('histSide').classList.toggle('-translate-x-full'); }
+        function genID() { document.getElementById('repID').innerText = 'QL-' + Math.random().toString(36).substr(2, 7).toUpperCase(); }
 
-        // تهيئة النظام
-        const select = document.getElementById('testSelect');
-        Object.keys(GLOBAL_MASTER_DB).sort().forEach(k => { select.innerHTML += `<option value="${k}">${k} - ${GLOBAL_MASTER_DB[k].ar}</option>`; });
+        const sel = document.getElementById('testSelect');
+        Object.keys(DB).sort((a,b) => DB[a].o - DB[b].o).forEach(k => { sel.innerHTML += `<option value="${k}">${k} - ${DB[k].ar}</option>`; });
         document.getElementById('repDate').innerText = new Date().toLocaleDateString('en-GB');
-        generateNewID();
-        renderHistory();
+        genID(); renderHist();
     </script>
 </body>
 </html>
